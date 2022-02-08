@@ -5,19 +5,19 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_home">
 
-    <fragment
+    <show_hide_fragment
         android:id="@+id/navigation_home"
         android:name="presence.apk.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
-    <fragment
+    <show_hide_fragment
         android:id="@+id/navigation_dashboard"
         android:name="presence.apk.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
-    <fragment
+    <show_hide_fragment
         android:id="@+id/navigation_notifications"
         android:name="presence.apk.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
