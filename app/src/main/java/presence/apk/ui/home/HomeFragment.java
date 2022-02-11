@@ -1,8 +1,13 @@
 package presence.apk.ui.home;
 
-import android.media.MediaPlayer;
+import static android.content.Context.BIND_AUTO_CREATE;
+
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.IBinder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import presence.apk.MusicService;
 import presence.apk.R;
 
 public class HomeFragment extends Fragment {
@@ -37,7 +43,10 @@ public class HomeFragment extends Fragment {
         return root;*/
     private TextView countdownText;
     private Button countdownButton;
-    private MediaPlayer player;
+
+    private MusicService.MusicController musicController;
+    private Intent intent;
+    private MusicServiceConn conn;
 
     private CountDownTimer countDownTimer;
     private long timeLeftInMiliseconds = 30000; //20mins
@@ -58,6 +67,12 @@ public class HomeFragment extends Fragment {
                 startStop();
             }
         });
+
+        intent = new Intent(getActivity(), MusicService.class);
+        getActivity().startService(intent);
+        conn = new MusicServiceConn();
+        getActivity().bindService(intent, conn, BIND_AUTO_CREATE);
+
         updateTimer();
         return view;
     }
@@ -67,18 +82,12 @@ public class HomeFragment extends Fragment {
     public void startStop(){
         if(timerRunning){
             resetTimer();
+            stop();
         }else{
             startTimer();
+            play();
         }
-        if (player == null)
-        {
-            player = MediaPlayer.create(getActivity(), R.raw.alarm03);
-            player.start();
-            player.setLooping(true);
-        }else{
-            player.release();
-            player = null;
-        }
+
     }
 
     public void startTimer(){
@@ -93,8 +102,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFinish() {
                 resetTimer();
-                player.release();
-                player = null;
+                stop();
             }
         }.start();
         countdownButton.setText("Reset");
@@ -129,7 +137,25 @@ public class HomeFragment extends Fragment {
         countdownText.setText(timeLeftText);
     }
 
+    public void play(){
+        musicController.play();
+    }
 
+    public void stop(){
+        musicController.stop();
+    }
+
+
+    class MusicServiceConn implements ServiceConnection{
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service){
+            musicController = (MusicService.MusicController)service;
+        }
+        @Override
+        public  void onServiceDisconnected(ComponentName name){
+        }
+    }
 
     @Override
     public void onDestroyView() {
