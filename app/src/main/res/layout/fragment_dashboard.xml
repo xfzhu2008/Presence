@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.dashboard.DashboardFragment">
 
+
     <ListView
         android:id="@+id/listViewSong"
         android:layout_width="match_parent"
@@ -13,5 +14,6 @@
         android:divider="@android:color/transparent"
         android:dividerHeight="10.0sp"
         android:padding="8dp" />
+
 
 </RelativeLayout>

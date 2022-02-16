@@ -3,12 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../SDK/AndroidStudio/platforms/android-31/data/res/layout/simple_list_item_1.xml" value="0.17135416666666667" />
         <entry key="..\:/Users/xfzhu/AndroidStudioProjects/Presence2/app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.38229166666666664" />
         <entry key="..\:/Users/xfzhu/AndroidStudioProjects/Presence2/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.38229166666666664" />
         <entry key="..\:/Users/xfzhu/AndroidStudioProjects/Presence2/app/src/main/res/layout/activity_main.xml" value="0.2957427536231884" />
         <entry key="..\:/Users/xfzhu/AndroidStudioProjects/Presence2/app/src/main/res/layout/fragment_dashboard.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/xfzhu/AndroidStudioProjects/Presence2/app/src/main/res/layout/fragment_home.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/xfzhu/AndroidStudioProjects/Presence2/app/src/main/res/layout/fragment_notifications.xml" value="0.20052083333333334" />
+        <entry key="..\:/Users/xfzhu/AndroidStudioProjects/Presence2/app/src/main/res/layout/item_lv_song.xml" value="0.44635416666666666" />
         <entry key="..\:/Users/xfzhu/AndroidStudioProjects/Presence2/app/src/main/res/layout/styles.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/xfzhu/AndroidStudioProjects/Presence2/app/src/main/res/menu/bottom_nav_menu.xml" value="0.20052083333333334" />
         <entry key="..\:/Users/xfzhu/AndroidStudioProjects/Presence2/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.38229166666666664" />
@@ -16,6 +18,7 @@
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.15729166666666666" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.15729166666666666" />
         <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.15729166666666666" />
+        <entry key="app/src/main/res/layout/item_lv_song.xml" value="0.20012165450121655" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.15729166666666666" />
       </map>
     </option>

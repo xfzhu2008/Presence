@@ -30,3 +30,7 @@
 -keep class com.huawei.updatesdk.**{*;}
 -keep class com.huawei.hms.**{*;}
 
+
+-keep class com.hianalytics.android.**{*;}
+
+

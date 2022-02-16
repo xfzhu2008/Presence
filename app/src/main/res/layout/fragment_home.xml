@@ -19,29 +19,62 @@
             android:textSize="50sp" />
     </LinearLayout>
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/fragment_demo_switch_colored"
-        style="@style/setting"
-        android:text="Colored" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/fragment_demo_show_hide"
-        style="@style/setting"
-        android:checked="true"
-        android:text="Show bottom navigation" />
+        <TextView
+            android:id="@+id/TextHR"
+            style="@style/setting"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:text="Heart Rate" />
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/fragment_demo_selected_background"
-        style="@style/setting"
-        android:checked="false"
-        android:text="Show selected background" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right">
+            <TextView
+                android:id="@+id/HeartRate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/setting"
+                android:checked="true"
+                android:layout_marginRight="50dp"
+                android:text="--" />
+        </LinearLayout>
+    </LinearLayout>
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/fragment_demo_translucent_navigation"
-        style="@style/setting"
-        android:checked="false"
-        android:text="Enable translucent navigation" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
+        <TextView
+            android:id="@+id/TextCadence"
+            style="@style/setting"
+            android:checked="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:text="Cadence" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right">
+
+            <TextView
+                android:id="@+id/Cadence"
+                style="@style/setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="50dp"
+                android:checked="false"
+                android:text="--" />
+        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
