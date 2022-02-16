@@ -52,6 +52,7 @@ public class HomeFragment extends Fragment {
     private long timeLeftInMiliseconds = 30000; //20mins
     private long StartTimeInMiliseconds = 30000; //20mins
     private boolean timerRunning;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
