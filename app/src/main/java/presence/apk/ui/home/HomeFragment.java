@@ -1,6 +1,9 @@
 package presence.apk.ui.home;
 
+
+import static android.content.ContentValues.TAG;
 import static android.content.Context.BIND_AUTO_CREATE;
+import static android.content.Context.POWER_SERVICE;
 
 import android.content.ComponentName;
 import android.content.Intent;
@@ -8,9 +11,12 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.IBinder;
+import android.os.PowerManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -48,10 +54,13 @@ public class HomeFragment extends Fragment {
     private Intent intent;
     private MusicServiceConn conn;
 
+    private PowerManager.WakeLock wl;
+
     private CountDownTimer countDownTimer;
     private long timeLeftInMiliseconds = 30000; //20mins
     private long StartTimeInMiliseconds = 30000; //20mins
     private boolean timerRunning;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -73,21 +82,37 @@ public class HomeFragment extends Fragment {
         conn = new MusicServiceConn();
         getActivity().bindService(intent, conn, BIND_AUTO_CREATE);
 
+
         updateTimer();
         return view;
     }
 
-
-
     public void startStop(){
         if(timerRunning){
+            ReleaseWakeLock();
             resetTimer();
             stop();
         }else{
+            AddWakeLock();
             startTimer();
             play();
         }
+    }
 
+    public void AddWakeLock(){
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        PowerManager pm = (PowerManager) getActivity().getSystemService(POWER_SERVICE);
+        wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "presence::wlTag");
+        wl.acquire();
+        Log.i(TAG, " wakelock wl.acquire(); ");
+
+    }
+
+    public void ReleaseWakeLock(){
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        wl.release();
+        wl = null;
+        Log.i(TAG, " wakelock wl.release(); ");
     }
 
     public void startTimer(){
@@ -101,6 +126,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFinish() {
+                ReleaseWakeLock();
                 resetTimer();
                 stop();
             }
@@ -145,7 +171,6 @@ public class HomeFragment extends Fragment {
         musicController.stop();
     }
 
-
     class MusicServiceConn implements ServiceConnection{
 
         @Override
@@ -159,8 +184,7 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
-    }
+        super.onDestroyView(); }
 }
 
 

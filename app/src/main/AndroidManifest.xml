@@ -2,7 +2,25 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="presence.apk">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BODY_SENSORS" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <queries>
+        <intent>
+            <action android:name="com.huawei.hms.core.aidlservice" />
+        </intent>
+    </queries>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,9 +29,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Presence">
         <service
-            android:name=".MusicService"
+            android:name=".HeartRateService"
             android:enabled="true"
             android:exported="true"></service>
+        <service
+            android:name=".MusicService"
+            android:enabled="true"
+            android:exported="true" />
 
         <activity
             android:name=".MainActivity"
@@ -29,6 +51,13 @@
         <meta-data
             android:name="com.huawei.hms.client.appid"
             android:value="105229797" />
+        <meta-data
+            android:name="com.huawei.hms.client.channel.androidMarket"
+            android:value="false" />
+        <meta-data
+            android:name="com.huawei.hms.client.cpid"
+            android:value="cpid=190086000123402784">
+        </meta-data>
     </application>
 
 </manifest>

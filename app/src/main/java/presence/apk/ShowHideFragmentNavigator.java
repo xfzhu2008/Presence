@@ -95,10 +95,12 @@ public class ShowHideFragmentNavigator extends FragmentNavigator {
             return null;
         }
 
-        final boolean initialNavigation = mBackStack.isEmpty();
-        final boolean isSingleTopReplacement = navOptions != null && !initialNavigation
+        boolean initialNavigation = mBackStack.isEmpty();
+        boolean isSingleTopReplacement = navOptions != null && !initialNavigation
                 && navOptions.shouldLaunchSingleTop()
                 && mBackStack.peekLast() == destId;
+
+        isSingleTopReplacement = true;
 
         boolean isAdded;
         if (initialNavigation) {
