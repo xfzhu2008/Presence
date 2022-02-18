@@ -8,6 +8,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
@@ -21,6 +22,7 @@ import com.huawei.hihealthkit.data.store.HiRealTimeListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import presence.apk.ui.home.HomeFragment;
 
@@ -33,7 +35,6 @@ public class HeartRateService extends Service {
     private static final String TAG = "HeartRateService";
 
     // HMS Health AutoRecorderController
-
     private Context context;
 
     @Override
@@ -43,20 +44,24 @@ public class HeartRateService extends Service {
         Log.i(TAG, "service is create.");
 
     }
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return new RealtimeDataController();
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public class RealtimeDataController extends Binder {
+
+        public void onStart(){HeartRateService.this.onStartCommand();}
+        public void onstop(){HeartRateService.this.onDestroy();}
+    }
+
+    public void onStartCommand() {
         // Invoke the real-time callback interface of the HealthKit.
         getRemoteService();
+
         // Binding a notification bar
         getNotification();
-        return super.onStartCommand(intent, flags, startId);
     }
 
 
@@ -66,6 +71,8 @@ public class HeartRateService extends Service {
     private void getRemoteService() {
         // Start recording real-time heartrate.
         HiHealthDataStore.startReadingHeartRate(context, new HiRealTimeListener() {
+
+
             @Override
             public void onResult(int state) {
                 // 获取实时心率数据结果
@@ -125,8 +132,6 @@ public class HeartRateService extends Service {
             }
         });
     }
-
-
 
     @Override
     public void onDestroy() {

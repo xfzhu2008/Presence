@@ -23,6 +23,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import presence.apk.HeartRateService;
 import presence.apk.MusicService;
 import presence.apk.R;
 
@@ -48,6 +49,7 @@ public class HomeFragment extends Fragment {
         });
         return root;*/
     private TextView countdownText;
+    private TextView HeartRateText;
     private Button countdownButton;
 
     private MusicService.MusicController musicController;
@@ -61,6 +63,11 @@ public class HomeFragment extends Fragment {
     private long StartTimeInMiliseconds = 30000; //20mins
     private boolean timerRunning;
 
+    private Intent hrIntent;
+    private HeartRateService.RealtimeDataController hrController;
+    private HeartRateServiceConn hrConn;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -68,6 +75,7 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home,container,false);
 
         countdownText = view.findViewById(R.id.countdown_text);
+        HeartRateText = view.findViewById(R.id.HeartRate);
         countdownButton = view.findViewById(R.id.countdownbutton);
 
         countdownButton.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +90,11 @@ public class HomeFragment extends Fragment {
         conn = new MusicServiceConn();
         getActivity().bindService(intent, conn, BIND_AUTO_CREATE);
 
+        hrIntent = new Intent(getActivity(), HeartRateService.class);
+        getActivity().startService(hrIntent);
+
+        hrConn = new HeartRateServiceConn();
+        getActivity().bindService(hrIntent, hrConn, BIND_AUTO_CREATE);
 
         updateTimer();
         return view;
@@ -89,10 +102,13 @@ public class HomeFragment extends Fragment {
 
     public void startStop(){
         if(timerRunning){
+            hrStop();
+            HeartRateText.setText("--");
             ReleaseWakeLock();
             resetTimer();
             stop();
         }else{
+            hrRecord();
             AddWakeLock();
             startTimer();
             play();
@@ -171,11 +187,27 @@ public class HomeFragment extends Fragment {
         musicController.stop();
     }
 
+    public void hrRecord() { hrController.onStart(); }
+
+    public void hrStop() { hrController.onstop();}
+
+
     class MusicServiceConn implements ServiceConnection{
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service){
             musicController = (MusicService.MusicController)service;
+        }
+        @Override
+        public  void onServiceDisconnected(ComponentName name){
+        }
+    }
+
+    class HeartRateServiceConn implements ServiceConnection{
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service){
+            hrController = (HeartRateService.RealtimeDataController)service;
         }
         @Override
         public  void onServiceDisconnected(ComponentName name){
