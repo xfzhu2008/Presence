@@ -5,8 +5,11 @@ import static android.content.ContentValues.TAG;
 import static android.content.Context.BIND_AUTO_CREATE;
 import static android.content.Context.POWER_SERVICE;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -23,33 +26,36 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import presence.apk.HeartRateService;
+import com.huawei.hihealthkit.data.HiHealthKitConstant;
+
 import presence.apk.MusicService;
 import presence.apk.R;
+import presence.apk.SportService;
 
 public class HomeFragment extends Fragment {
 
-   /* private HomeViewModel homeViewModel;
-    private FragmentHomeBinding binding;
+    /* private HomeViewModel homeViewModel;
+     private FragmentHomeBinding binding;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+     public View onCreateView(@NonNull LayoutInflater inflater,
+                              ViewGroup container, Bundle savedInstanceState) {
+         homeViewModel =
+                 new ViewModelProvider(this).get(HomeViewModel.class);
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+         binding = FragmentHomeBinding.inflate(inflater, container, false);
+         View root = binding.getRoot();
 
-        final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-        return root;*/
+         final TextView textView = binding.textHome;
+         homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+             @Override
+             public void onChanged(@Nullable String s) {
+                 textView.setText(s);
+             }
+         });
+         return root;*/
     private TextView countdownText;
     private TextView HeartRateText;
+    private TextView CadenceText;
     private Button countdownButton;
 
     private MusicService.MusicController musicController;
@@ -59,23 +65,25 @@ public class HomeFragment extends Fragment {
     private PowerManager.WakeLock wl;
 
     private CountDownTimer countDownTimer;
-    private long timeLeftInMiliseconds = 30000; //20mins
-    private long StartTimeInMiliseconds = 30000; //20mins
+    private long timeLeftInMiliseconds = 300000; //20mins
+    private long StartTimeInMiliseconds = 300000; //20mins
     private boolean timerRunning;
 
-    private Intent hrIntent;
-    private HeartRateService.RealtimeDataController hrController;
-    private HeartRateServiceConn hrConn;
+    private Intent spIntent;
+    private SportService.SportController spController;
+    private SportServiceConn spConn;
+
+    private SportReceiver receiver;
 
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        View view = inflater.inflate(R.layout.fragment_home,container,false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         countdownText = view.findViewById(R.id.countdown_text);
         HeartRateText = view.findViewById(R.id.HeartRate);
+        CadenceText = view.findViewById(R.id.Cadence);
         countdownButton = view.findViewById(R.id.countdownbutton);
 
         countdownButton.setOnClickListener(new View.OnClickListener() {
@@ -90,32 +98,36 @@ public class HomeFragment extends Fragment {
         conn = new MusicServiceConn();
         getActivity().bindService(intent, conn, BIND_AUTO_CREATE);
 
-        hrIntent = new Intent(getActivity(), HeartRateService.class);
-        getActivity().startService(hrIntent);
+        spIntent = new Intent(getActivity(), SportService.class);
+        getActivity().startService(spIntent);
+        spConn = new SportServiceConn();
+        getActivity().bindService(spIntent, spConn, BIND_AUTO_CREATE);
 
-        hrConn = new HeartRateServiceConn();
-        getActivity().bindService(hrIntent, hrConn, BIND_AUTO_CREATE);
+        receiver = new SportReceiver();
+        IntentFilter filter = new IntentFilter("action.sport");
+        getActivity().registerReceiver(receiver, filter);
 
         updateTimer();
         return view;
     }
 
-    public void startStop(){
-        if(timerRunning){
-            hrStop();
+    public void startStop() {
+        if (timerRunning) {
+            spStop();
             HeartRateText.setText("--");
+            CadenceText.setText("--");
             ReleaseWakeLock();
             resetTimer();
             stop();
-        }else{
-            hrRecord();
+        } else {
+            spRecord();
             AddWakeLock();
             startTimer();
             play();
         }
     }
 
-    public void AddWakeLock(){
+    public void AddWakeLock() {
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         PowerManager pm = (PowerManager) getActivity().getSystemService(POWER_SERVICE);
         wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "presence::wlTag");
@@ -124,14 +136,14 @@ public class HomeFragment extends Fragment {
 
     }
 
-    public void ReleaseWakeLock(){
+    public void ReleaseWakeLock() {
         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         wl.release();
         wl = null;
         Log.i(TAG, " wakelock wl.release(); ");
     }
 
-    public void startTimer(){
+    public void startTimer() {
         countDownTimer = new CountDownTimer(timeLeftInMiliseconds, 1000) {
             @Override
             public void onTick(long l) {
@@ -142,6 +154,9 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFinish() {
+                spStop();
+                HeartRateText.setText("--");
+                CadenceText.setText("--");
                 ReleaseWakeLock();
                 resetTimer();
                 stop();
@@ -151,23 +166,23 @@ public class HomeFragment extends Fragment {
         timerRunning = true;
     }
 
-    public void stopTimer(){
+    public void stopTimer() {
         countDownTimer.cancel();
         countdownButton.setText("Resume");
         timerRunning = false;
     }
 
-    public void resetTimer(){
+    public void resetTimer() {
         countDownTimer.cancel();
         timerRunning = false;
-        timeLeftInMiliseconds= StartTimeInMiliseconds;
+        timeLeftInMiliseconds = StartTimeInMiliseconds;
         countdownButton.setText("Start running");
         updateTimer();
     }
 
-    public void updateTimer(){
-        int minutes = (int)timeLeftInMiliseconds / 60000;
-        int seconds = (int)timeLeftInMiliseconds % 60000 / 1000;
+    public void updateTimer() {
+        int minutes = (int) timeLeftInMiliseconds / 60000;
+        int seconds = (int) timeLeftInMiliseconds % 60000 / 1000;
 
         String timeLeftText;
 
@@ -179,35 +194,36 @@ public class HomeFragment extends Fragment {
         countdownText.setText(timeLeftText);
     }
 
-    public void play(){
+    public void play() {
         musicController.play();
     }
 
-    public void stop(){
+    public void stop() {
         musicController.stop();
     }
 
-    public void hrRecord() { hrController.onStart(); }
+    public void spRecord() { spController.onStart();}
 
-    public void hrStop() { hrController.onstop();}
+    public void spStop() { spController.onStop();}
 
 
-    class MusicServiceConn implements ServiceConnection{
+    class MusicServiceConn implements ServiceConnection {
 
         @Override
-        public void onServiceConnected(ComponentName name, IBinder service){
-            musicController = (MusicService.MusicController)service;
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            musicController = (MusicService.MusicController) service;
         }
+
         @Override
-        public  void onServiceDisconnected(ComponentName name){
+        public void onServiceDisconnected(ComponentName name) {
         }
     }
 
-    class HeartRateServiceConn implements ServiceConnection{
+    class SportServiceConn implements ServiceConnection{
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service){
-            hrController = (HeartRateService.RealtimeDataController)service;
+            spController = (SportService.SportController)service;
         }
         @Override
         public  void onServiceDisconnected(ComponentName name){
@@ -216,7 +232,21 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView(); }
+        super.onDestroyView();
+        ReleaseWakeLock();
+        getActivity().stopService(spIntent);
+        getActivity().unregisterReceiver(receiver);
+    }
+
+    class SportReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if ("action.sport".equals(intent.getAction())) {
+                CadenceText.setText(String.valueOf(intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_STEP_RATE, 0)));
+                HeartRateText.setText(String.valueOf(intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_HEARTRATE, 0)));
+            }
+        }
+    }
 }
 
 

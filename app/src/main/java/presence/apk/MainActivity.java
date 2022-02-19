@@ -120,6 +120,9 @@ public class MainActivity extends AppCompatActivity {
         // 获取实时心率
         scopeList.add(new Scope(HiHealthExtendScope.HEALTHKIT_EXTEND_REALTIME_HEART_READ));
 
+        // 控制和获取实时运动权限
+        scopeList.add(new Scope(HiHealthExtendScope.HEALTHKIT_EXTEND_SPORT_READ));
+
         // 设置授权参数
         HuaweiIdAuthParamsHelper authParamsHelper = new HuaweiIdAuthParamsHelper(
                 HuaweiIdAuthParams.DEFAULT_AUTH_REQUEST_PARAM);
@@ -212,13 +215,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-
             finish();
             return true;
         }
-
         return super.onKeyDown(keyCode, event);
     }
 
