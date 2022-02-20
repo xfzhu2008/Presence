@@ -113,7 +113,7 @@ public class SportService extends Service {
     private void getNotification() {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         Notification notification = new NotificationCompat.Builder(this, "2").setContentTitle("Real-time Sport Running...")
-                .setContentText("Real-time Cadence Counting...")
+                .setContentText("Real-time BioData Counting...")
                 .setWhen(System.currentTimeMillis())
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
                 .setSmallIcon(R.mipmap.ic_launcher)

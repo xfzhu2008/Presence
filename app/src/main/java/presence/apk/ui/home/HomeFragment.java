@@ -118,7 +118,7 @@ public class HomeFragment extends Fragment {
             ReleaseWakeLock();
             resetTimer();
             stop();
-
+            SetTextToNull();
         } else {
             spRecord();
             AddWakeLock();
@@ -155,8 +155,6 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFinish() {
                 spStop();
-                HeartRateText.setText("--");
-                CadenceText.setText("--");
                 ReleaseWakeLock();
                 resetTimer();
                 stop();
