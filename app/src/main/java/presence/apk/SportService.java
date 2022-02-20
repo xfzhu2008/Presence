@@ -49,7 +49,7 @@ public class SportService extends Service {
         }
 
         public void onStop() {
-            SportService.this.onDestroy();
+            SportService.this.onStopCommand();
         }
     }
 
@@ -62,6 +62,12 @@ public class SportService extends Service {
 
         // Binding a notification bar
         getNotification();
+    }
+
+    public void onStopCommand() {
+        StopSport();
+        StopRemoteService();
+        cancelNotification();
     }
 
     private void getRemoteService() {
@@ -130,6 +136,12 @@ public class SportService extends Service {
         startForeground(2, notification);
     }
 
+    private void cancelNotification(){
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        stopForeground(true);
+        notificationManager.cancelAll();
+    }
+
     private void StopSport() {
         HiHealthDataStore.stopSport(context, new ResultCallback() {
             @Override
@@ -160,8 +172,6 @@ public class SportService extends Service {
 
     @Override
     public void onDestroy() {
-        StopSport();
-        StopRemoteService();
         super.onDestroy();
         Log.i(TAG, "SportService is destroy.");
     }

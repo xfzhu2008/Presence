@@ -149,7 +149,6 @@ public class HomeFragment extends Fragment {
             public void onTick(long l) {
                 timeLeftInMiliseconds = l;
                 updateTimer();
-
             }
 
             @Override
