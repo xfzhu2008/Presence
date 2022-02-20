@@ -45,7 +45,7 @@ private MediaPlayer player;
 
     public void play(){
         try{
-            player = MediaPlayer.create(this, R.raw.alarm03);
+            player = MediaPlayer.create(this, R.raw.oceanwaves);
             player.start();
             player.setLooping(true);
         }catch (Exception e){

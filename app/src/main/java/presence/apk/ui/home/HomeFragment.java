@@ -13,6 +13,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
@@ -114,11 +115,10 @@ public class HomeFragment extends Fragment {
     public void startStop() {
         if (timerRunning) {
             spStop();
-            HeartRateText.setText("--");
-            CadenceText.setText("--");
             ReleaseWakeLock();
             resetTimer();
             stop();
+
         } else {
             spRecord();
             AddWakeLock();
@@ -160,6 +160,7 @@ public class HomeFragment extends Fragment {
                 ReleaseWakeLock();
                 resetTimer();
                 stop();
+                SetTextToNull();
             }
         }.start();
         countdownButton.setText("Reset");
@@ -233,9 +234,18 @@ public class HomeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ReleaseWakeLock();
         getActivity().stopService(spIntent);
         getActivity().unregisterReceiver(receiver);
+    }
+
+    public void SetTextToNull(){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                HeartRateText.setText("--");
+                CadenceText.setText("--");
+            }
+        },5000); // 延时5秒
     }
 
     class SportReceiver extends BroadcastReceiver {
