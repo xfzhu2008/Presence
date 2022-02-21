@@ -8,10 +8,13 @@ import android.os.IBinder;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class MusicService extends Service {
 
 private MediaPlayer player;
-
+ArrayList<Integer> NoiseList;
 
     @Nullable
     @Override
@@ -29,12 +32,14 @@ private MediaPlayer player;
             }
 
     }
+
     @Override
     public void onCreate() {
         super.onCreate();
         player = new MediaPlayer();
 
-}
+    }
+
     @Override
     public void onDestroy() {
     super.onDestroy();
@@ -44,13 +49,16 @@ private MediaPlayer player;
     }
 
     public void play(){
-        try{
-            player = MediaPlayer.create(this, R.raw.oceanwaves);
-            player.start();
-            player.setLooping(true);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        NoiseList = new ArrayList<>();
+        NoiseList.add(R.raw.oceanwaves);
+        NoiseList.add(R.raw.garden);
+        NoiseList.add(R.raw.land);
+        NoiseList.add(R.raw.night);
+        NoiseList.add(R.raw.forest);
+        NoiseList.add(R.raw.river);
+        NoiseList.add(R.raw.thunder);
+        Collections.shuffle(NoiseList);
+        player = MediaPlayer.create(this, NoiseList.get(0));
+        player.start();
     }
-
 }
