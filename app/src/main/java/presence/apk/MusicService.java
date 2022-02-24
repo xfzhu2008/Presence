@@ -101,7 +101,7 @@ public class MusicService extends Service implements LifecycleOwner {
         Collections.shuffle(NoiseList);
         MusicList1 = new ArrayList<>();
         MusicList1.add(R.raw.miles);
- //       MusicList1.add(R.raw.river);
+        MusicList1.add(R.raw.jazen120);
         Collections.shuffle(MusicList1);
         MusicList2 = new ArrayList<>();
         MusicList2.add(R.raw.japannight);
@@ -141,82 +141,83 @@ public class MusicService extends Service implements LifecycleOwner {
     }
 
     public void MusicPlay(){
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(HeartRate<100){
-                    if (player != null && player.isPlaying()) {
-                        FadeIn.volumeGradient(player, 1, 0);
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                player.stop();
-                                player.release();
-                                player = null;
-                                HomeFragment HomeController = new HomeFragment();
-                                SportService SportController = new SportService();
-                                SportController.onStopCommand();
-                                HomeController.ReleaseWakeLock();
-                                HomeController.resetTimer();
-                                HomeController.SetTextToNull();
+        if(mplayer != null && mplayer.isPlaying()){}else {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (HeartRate < 100) {
+                        if (player != null && player.isPlaying()) {
+                            FadeIn.volumeGradient(player, 1, 0);
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    player.stop();
+                                    player.release();
+                                    player = null;
+                                    HomeFragment HomeController = new HomeFragment();
+                                    SportService SportController = new SportService();
+                                    SportController.onStopCommand();
+                                    HomeController.ReleaseWakeLock();
+                                    HomeController.resetTimer();
+                                    HomeController.SetTextToNull();
+                                }
+                            }, 6000); // 延时6秒
+                        }
+                    } else {
+                        if (HeartRate < 130) {
+                            mplayer = MediaPlayer.create(getApplicationContext(), MusicList1.get(j));
+                            mplayer.start();
+                            FadeIn.volumeGradient(mplayer, 0, 1);
+                            MusicList = 1;
+                        } else {
+                            if (HeartRate < 150) {
+                                mplayer = MediaPlayer.create(getApplicationContext(), MusicList2.get(j));
+                                mplayer.start();
+                                FadeIn.volumeGradient(mplayer, 0, 1);
+                                MusicList = 2;
+                            } else {
+                                if (HeartRate < 170) {
+                                    mplayer = MediaPlayer.create(getApplicationContext(), MusicList3.get(j));
+                                    mplayer.start();
+                                    FadeIn.volumeGradient(mplayer, 0, 1);
+                                    MusicList = 3;
+                                } else {
+                                    if (player != null && player.isPlaying()) {
+                                        FadeIn.volumeGradient(player, 1, 0);
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                player.stop();
+                                                player.release();
+                                                player = null;
+                                                HomeFragment HomeController = new HomeFragment();
+                                                HomeController.spStop();
+                                                HomeController.ReleaseWakeLock();
+                                                HomeController.resetTimer();
+                                                HomeController.SetTextToNull();
+                                            }
+                                        }, 6000); // 延时6秒
+                                    }
+                                }
                             }
-                        },6000); // 延时6秒
+                        }
                     }
-                }else{ if(HeartRate<130){
-                    mplayer = MediaPlayer.create(getApplicationContext(), MusicList1.get(j));
-                    mplayer.start();
-                    FadeIn.volumeGradient(mplayer, 0, 1);
-                    MusicList = 1;
-                }else{ if(HeartRate<150){
-                    mplayer = MediaPlayer.create(getApplicationContext(), MusicList2.get(j));
-                    mplayer.start();
-                    FadeIn.volumeGradient(mplayer, 0, 1);
-                    MusicList = 2;
-                }else{ if(HeartRate<170){
-                    mplayer = MediaPlayer.create(getApplicationContext(), MusicList3.get(j));
-                    mplayer.start();
-                    FadeIn.volumeGradient(mplayer, 0, 1);
-                    MusicList = 3;
-                }else{
-                    if (player != null && player.isPlaying()) {
-                        FadeIn.volumeGradient(player, 1, 0);
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                player.stop();
-                                player.release();
-                                player = null;
-                                HomeFragment HomeController = new HomeFragment();
-                                HomeController.spStop();
-                                HomeController.ReleaseWakeLock();
-                                HomeController.resetTimer();
-                                HomeController.SetTextToNull();
-                            }
-                        },6000); // 延时6秒
-                    }
+                    mplayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        public void onCompletion(MediaPlayer mp) {
+                            j=j+1;
+                            mplayer.stop();
+                            mplayer.release();
+                            mplayer = null;
+                            if(j<3) {MusicPlay();}
+                        }
+                    });
                 }
-                }
-                }
-                }
-            }
-        },60000); // 延时60秒
-        if(mplayer != null && mplayer.isPlaying()){
-        mplayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            public void onCompletion(MediaPlayer mmp) {
-                j=j+1;
-                mplayer.stop();
-                mplayer.release();
-                mplayer = null;
-                if(j<3) {MusicPlay();}
-            }
-        });}
-
+            }, 60000); // 延时60秒
+        }
     }
 
     public void play(){
-        if (player != null && player.isPlaying()) {
-
-        }else{
+        if (player != null && player.isPlaying()){}else{
             if(i==3){i=0;}
             player = MediaPlayer.create(this, NoiseList.get(i));
             player.start();
