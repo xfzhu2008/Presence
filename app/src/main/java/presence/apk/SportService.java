@@ -65,9 +65,13 @@ public class SportService extends Service {
     }
 
     public void onStopCommand() {
-        StopSport();
-        StopRemoteService();
-        cancelNotification();
+        try{
+            StopSport();
+            StopRemoteService();
+            cancelNotification();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void getRemoteService() {

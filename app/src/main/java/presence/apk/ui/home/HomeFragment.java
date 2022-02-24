@@ -66,8 +66,8 @@ public class HomeFragment extends Fragment {
     private PowerManager.WakeLock wl;
 
     private CountDownTimer countDownTimer;
-    private long timeLeftInMiliseconds = 300000; //20mins
-    private long StartTimeInMiliseconds = 300000; //20mins
+    private long timeLeftInMiliseconds = 1200000; //20mins
+    private long StartTimeInMiliseconds = 1200000; //20mins
     private boolean timerRunning;
 
     private Intent spIntent;
@@ -114,11 +114,16 @@ public class HomeFragment extends Fragment {
 
     public void startStop() {
         if (timerRunning) {
-            spStop();
-            ReleaseWakeLock();
-            resetTimer();
             stop();
-            SetTextToNull();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    spStop();
+                    ReleaseWakeLock();
+                    resetTimer();
+                    SetTextToNull();
+                }
+            },6000); // 延时6秒
         } else {
             spRecord();
             AddWakeLock();
@@ -200,6 +205,8 @@ public class HomeFragment extends Fragment {
         musicController.stop();
     }
 
+    public void setDataInMusic(){ musicController.setData();}
+
     public void spRecord() { spController.onStart();}
 
     public void spStop() { spController.onStop();}
@@ -241,9 +248,11 @@ public class HomeFragment extends Fragment {
             public void run() {
                 HeartRateText.setText("--");
                 CadenceText.setText("--");
+                setDataInMusic();
             }
         },5000); // 延时5秒
     }
+
 
     class SportReceiver extends BroadcastReceiver {
         @Override
@@ -255,5 +264,8 @@ public class HomeFragment extends Fragment {
         }
     }
 }
+
+
+
 
 
