@@ -78,6 +78,7 @@ public class HomeFragment extends Fragment {
     private SportServiceConn spConn;
 
     private SportReceiver receiver;
+    private StopRunReceiver receiver1;
 
     @Nullable
     @Override
@@ -110,6 +111,10 @@ public class HomeFragment extends Fragment {
         IntentFilter filter = new IntentFilter("action.sport");
         getActivity().registerReceiver(receiver, filter);
 
+        receiver1 = new StopRunReceiver();
+        IntentFilter filter1 = new IntentFilter("action.StopRunning");
+        getActivity().registerReceiver(receiver1, filter1);
+
         updateTimer();
         return view;
     }
@@ -140,7 +145,6 @@ public class HomeFragment extends Fragment {
         wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "presence::wlTag");
         wl.acquire();
         Log.i(TAG, " wakelock wl.acquire(); ");
-
     }
 
     public void ReleaseWakeLock() {
@@ -160,11 +164,16 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFinish() {
-                spStop();
-                ReleaseWakeLock();
-                resetTimer();
                 stop();
-                SetTextToNull();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        spStop();
+                        ReleaseWakeLock();
+                        resetTimer();
+                        SetTextToNull();
+                    }
+                },6000); // 延时6秒
             }
         }.start();
         countdownButton.setText("Reset");
@@ -255,6 +264,15 @@ public class HomeFragment extends Fragment {
             if ("action.sport".equals(intent.getAction())) {
                 CadenceText.setText(String.valueOf(intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_STEP_RATE, 0)));
                 HeartRateText.setText(String.valueOf(intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_HEARTRATE, 0)));
+            }
+        }
+    }
+
+    class StopRunReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if ("action.StopRunning".equals(intent.getAction())) {
+                startStop();
             }
         }
     }

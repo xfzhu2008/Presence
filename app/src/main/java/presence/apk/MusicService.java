@@ -49,10 +49,8 @@ public class MusicService extends Service implements LifecycleOwner {
     ArrayList<Integer> MusicList1;
     ArrayList<Integer> MusicList2;
     ArrayList<Integer> MusicList3;
-    private static int BEGIN_AFTER = 1000, INTERVAL = 1000;
+    private static int BEGIN_AFTER = 1000, INTERVAL = 10000;
     private Timer timer = new Timer();
-    HomeFragment homeController = new HomeFragment();
-    SportService sportController = new SportService();
     MusicServiceViewModel musicServiceViewModel = new MusicServiceViewModel();
     private LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
 
@@ -144,7 +142,8 @@ public class MusicService extends Service implements LifecycleOwner {
     }
 
     public void MusicStopRunning(){
-
+        Intent intent = new Intent("action.StopRunning");
+        sendBroadcast(intent);
     }
 
     @Override
@@ -160,15 +159,7 @@ public class MusicService extends Service implements LifecycleOwner {
                 @Override
                 public void run() {
                     if (HeartRate < 100) {
-                        if (player != null && player.isPlaying()) {
-                            FadeIn.volumeGradient(player, 1, 0);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    MusicStopRunning();
-                                }
-                            }, 6000); // 延时6秒
-                        }
+                        MusicStopRunning();
                     } else {
                         if (HeartRate < 130) {
                             mplayer = MediaPlayer.create(getApplicationContext(), MusicList1.get(j));
@@ -188,15 +179,7 @@ public class MusicService extends Service implements LifecycleOwner {
                                     FadeIn.volumeGradient(mplayer, 0, 1);
                                     MusicList = 3;
                                 } else {
-                                    if (player != null && player.isPlaying()) {
-                                        FadeIn.volumeGradient(player, 1, 0);
-                                        new Handler().postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                MusicStopRunning();
-                                            }
-                                        }, 6000); // 延时6秒
-                                    }
+                                    MusicStopRunning();
                                 }
                             }
                         }
@@ -281,7 +264,6 @@ public class MusicService extends Service implements LifecycleOwner {
         }
     }
 }
-
 
 class FadeIn {
     public static void volumeGradient(final MediaPlayer mediaPlayer,
