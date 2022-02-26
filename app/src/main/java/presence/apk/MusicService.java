@@ -14,7 +14,9 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,11 +25,14 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LifecycleRegistry;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.huawei.hihealthkit.data.HiHealthKitConstant;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import presence.apk.ui.home.HomeFragment;
 
@@ -44,6 +49,11 @@ public class MusicService extends Service implements LifecycleOwner {
     ArrayList<Integer> MusicList1;
     ArrayList<Integer> MusicList2;
     ArrayList<Integer> MusicList3;
+    private static int BEGIN_AFTER = 1000, INTERVAL = 1000;
+    private Timer timer = new Timer();
+    HomeFragment homeController = new HomeFragment();
+    SportService sportController = new SportService();
+    MusicServiceViewModel musicServiceViewModel = new MusicServiceViewModel();
     private LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
 
     @Nullable
@@ -84,7 +94,7 @@ public class MusicService extends Service implements LifecycleOwner {
     @Override
     public void onCreate() {
         super.onCreate();
-        HRListen();
+        iniComponent();
         mLifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
 
         receiver = new MusicReceiver();
@@ -133,6 +143,10 @@ public class MusicService extends Service implements LifecycleOwner {
         }
     }
 
+    public void MusicStopRunning(){
+
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -151,15 +165,7 @@ public class MusicService extends Service implements LifecycleOwner {
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    player.stop();
-                                    player.release();
-                                    player = null;
-                                    HomeFragment HomeController = new HomeFragment();
-                                    SportService SportController = new SportService();
-                                    SportController.onStopCommand();
-                                    HomeController.ReleaseWakeLock();
-                                    HomeController.resetTimer();
-                                    HomeController.SetTextToNull();
+                                    MusicStopRunning();
                                 }
                             }, 6000); // 延时6秒
                         }
@@ -187,14 +193,7 @@ public class MusicService extends Service implements LifecycleOwner {
                                         new Handler().postDelayed(new Runnable() {
                                             @Override
                                             public void run() {
-                                                player.stop();
-                                                player.release();
-                                                player = null;
-                                                HomeFragment HomeController = new HomeFragment();
-                                                HomeController.spStop();
-                                                HomeController.ReleaseWakeLock();
-                                                HomeController.resetTimer();
-                                                HomeController.SetTextToNull();
+                                                MusicStopRunning();
                                             }
                                         }, 6000); // 延时6秒
                                     }
@@ -239,26 +238,38 @@ public class MusicService extends Service implements LifecycleOwner {
         Cadence = 0;
     }
 
-    public void HRListen(){
-        MutableLiveData<Integer> listen = new MutableLiveData<>();
-        listen.setValue(HeartRate);
-        listen.observe(this,new Observer<Integer>() {
+    private void iniComponent()
+    {
+        //通过.observe()实现对ViewModel中数据变化的观察
+        MusicServiceViewModel.getsInstance().getCurrentHR().observe(this, new Observer<Integer>()
+        {
             @Override
-            public void onChanged(Integer HR) {
-                //Do something with the changed value
+            public void onChanged(@Nullable Integer HR)
+            {
                 if(mplayer != null && mplayer.isPlaying()){
                     switch(MusicList){
-                        case 1: if(HR<100 || HR>130){Log.d(TAG, " Out of Range1! " );}
-                        case 2: if(HR<130 || HR>150){Log.d(TAG, " Out of Range2! " );}
-                        case 3: if(HR<150 || HR>170){Log.d(TAG, " Out of Range3! " );}
+                        case 1: if(HR<100 || HR>130){Log.d(TAG, " Out of Range1! Running Stopped!!" );MusicStopRunning();}break;
+                        case 2: if(HR<130 || HR>150){Log.d(TAG, " Out of Range2! Running Stopped!!" );MusicStopRunning();}break;
+                        case 3: if(HR<150 || HR>170){Log.d(TAG, " Out of Range3! Running Stopped!!" );MusicStopRunning();}break;
                     }
                 }
             }
         });
+        startPost();
+    }
+
+    public void startPost(){
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                musicServiceViewModel =  MusicServiceViewModel.getsInstance();
+                final MutableLiveData<Integer> liveData = (MutableLiveData<Integer>)musicServiceViewModel.getCurrentHR();
+                liveData.postValue(HeartRate);
+            }
+        }, BEGIN_AFTER, INTERVAL);
     }
 
     private class MusicReceiver extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             if ("action.sport".equals(intent.getAction())) {

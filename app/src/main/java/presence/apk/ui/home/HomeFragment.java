@@ -29,7 +29,10 @@ import androidx.fragment.app.Fragment;
 
 import com.huawei.hihealthkit.data.HiHealthKitConstant;
 
+import java.util.TimerTask;
+
 import presence.apk.MusicService;
+import presence.apk.MusicServiceViewModel;
 import presence.apk.R;
 import presence.apk.SportService;
 
@@ -75,7 +78,6 @@ public class HomeFragment extends Fragment {
     private SportServiceConn spConn;
 
     private SportReceiver receiver;
-
 
     @Nullable
     @Override
@@ -169,12 +171,6 @@ public class HomeFragment extends Fragment {
         timerRunning = true;
     }
 
-    public void stopTimer() {
-        countDownTimer.cancel();
-        countdownButton.setText("Resume");
-        timerRunning = false;
-    }
-
     public void resetTimer() {
         countDownTimer.cancel();
         timerRunning = false;
@@ -252,7 +248,6 @@ public class HomeFragment extends Fragment {
             }
         },5000); // 延时5秒
     }
-
 
     class SportReceiver extends BroadcastReceiver {
         @Override
