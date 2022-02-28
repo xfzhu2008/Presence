@@ -74,6 +74,8 @@ public class MusicService extends Service implements LifecycleOwner {
             public void stop(){
                 if (mplayer != null && mplayer.isPlaying()) {
                     FadeIn.volumeGradient(mplayer, 1, 0);}
+                if (bPlayer != null && bPlayer.isPlaying()) {
+                    FadeIn.volumeGradient(bPlayer, 1, 0);}
                 if (player != null && player.isPlaying()) {
                     FadeIn.volumeGradient(player, 1, 0);}
                 new Handler().postDelayed(new Runnable() {
