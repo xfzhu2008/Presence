@@ -2,8 +2,6 @@ package presence.apk;
 
 import static android.content.ContentValues.TAG;
 
-import android.animation.Animator;
-import android.animation.ValueAnimator;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,10 +12,6 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.View;
-import android.view.animation.LinearInterpolator;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,7 +20,6 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LifecycleRegistry;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.huawei.hihealthkit.data.HiHealthKitConstant;
 
@@ -35,11 +28,9 @@ import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import presence.apk.ui.home.HomeFragment;
-
 public class MusicService extends Service implements LifecycleOwner {
     private static int MusicList = 0, HeartRate = 0, Cadence = 0, NoiseFlag = 0, i = 0, j = 0;
-    private static int BEGIN_AFTER = 1000, INTERVAL = 10000;
+    private final static int BEGIN_AFTER = 1000, INTERVAL = 10000;
     private MediaPlayer player;
     private MediaPlayer mplayer;
     private MediaPlayer bPlayer;
@@ -375,7 +366,7 @@ public class MusicService extends Service implements LifecycleOwner {
         }, BEGIN_AFTER, INTERVAL);
     }
 
-    private class MusicReceiver extends BroadcastReceiver {
+    private static class MusicReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             if ("action.sport".equals(intent.getAction())) {

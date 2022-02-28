@@ -24,8 +24,6 @@ import com.huawei.hihealthkit.data.HiHealthKitConstant;
 import com.huawei.hihealthkit.data.store.HiHealthDataStore;
 import com.huawei.hihealthkit.data.store.HiSportDataCallback;
 
-import org.json.JSONObject;
-
 import presence.apk.ui.home.HomeFragment;
 
 public class SportService extends Service {
@@ -159,14 +157,11 @@ public class SportService extends Service {
 
     private void StopRemoteService() {
         HiHealthDataStore.unregisterSportData(context, new HiSportDataCallback() {
-            JSONObject jsonResult;
-
             @Override
             public void onResult(int resultCode) {
                 // 接口调用结果
                 Log.i(TAG, "unregisterSportData onResult resultCode:" + resultCode);
             }
-
             @Override
             public void onDataChanged(int state, Bundle bundle) {
                 // 此时不会被调用

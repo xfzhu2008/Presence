@@ -29,34 +29,13 @@ import androidx.fragment.app.Fragment;
 
 import com.huawei.hihealthkit.data.HiHealthKitConstant;
 
-import java.util.TimerTask;
 
 import presence.apk.MusicService;
-import presence.apk.MusicServiceViewModel;
 import presence.apk.R;
 import presence.apk.SportService;
 
 public class HomeFragment extends Fragment {
 
-    /* private HomeViewModel homeViewModel;
-     private FragmentHomeBinding binding;
-
-     public View onCreateView(@NonNull LayoutInflater inflater,
-                              ViewGroup container, Bundle savedInstanceState) {
-         homeViewModel =
-                 new ViewModelProvider(this).get(HomeViewModel.class);
-
-         binding = FragmentHomeBinding.inflate(inflater, container, false);
-         View root = binding.getRoot();
-
-         final TextView textView = binding.textHome;
-         homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-             @Override
-             public void onChanged(@Nullable String s) {
-                 textView.setText(s);
-             }
-         });
-         return root;*/
     private TextView countdownText;
     private TextView HeartRateText;
     private TextView CadenceText;
@@ -70,7 +49,7 @@ public class HomeFragment extends Fragment {
 
     private CountDownTimer countDownTimer;
     private long timeLeftInMiliseconds = 1200000; //20mins
-    private long StartTimeInMiliseconds = 1200000; //20mins
+    private final long StartTimeInMiliseconds = 1200000; //20mins
     private boolean timerRunning;
 
     private Intent spIntent;
