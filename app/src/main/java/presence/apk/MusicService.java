@@ -39,13 +39,14 @@ import presence.apk.ui.home.HomeFragment;
 
 public class MusicService extends Service implements LifecycleOwner {
     private static int MusicList = 0, HeartRate = 0, Cadence = 0, NoiseFlag = 0, i = 0, j = 0;
-    private static int BEGIN_AFTER = 1000, INTERVAL = 7000;
+    private static int BEGIN_AFTER = 1000, INTERVAL = 10000;
     private MediaPlayer player;
     private MediaPlayer mplayer;
     private MediaPlayer bPlayer;
     private MusicReceiver receiver;
     ArrayList<Integer> NoiseList, MusicList1, MusicList2, MusicList3;
     private Timer timer = new Timer();
+    private Handler mHandler = new Handler();
     MusicServiceViewModel musicServiceViewModel = new MusicServiceViewModel();
     MusicServiceCaViewModel musicServiceCaViewModel = new MusicServiceCaViewModel();
     NoiseFlagViewModel noiseFlagViewModel = new NoiseFlagViewModel();
@@ -82,8 +83,10 @@ public class MusicService extends Service implements LifecycleOwner {
                     }
                 },6000); // 延时6秒
             }
-            public void setData(){setDataInMusic();}
-
+            public void setData(){ setDataInMusic(); }
+            public void RemoveCallBack(){
+                RemoveMusicCallBack();
+            }
     }
 
     @Override
@@ -163,12 +166,16 @@ public class MusicService extends Service implements LifecycleOwner {
 
     public void MusicPlay(){
         if(mplayer != null && mplayer.isPlaying()){}else {
-            new Handler().postDelayed(new Runnable() {
+            Runnable mRun = new Runnable() {
                 @Override
                 public void run() {
                     if (HeartRate < 100) {
-                        if (player != null && player.isPlaying()){ MusicStopRunning(); }
-                        if (bPlayer != null && bPlayer.isPlaying()){ MusicStopRunning(); }
+                        if (player != null && player.isPlaying()) {
+                            MusicStopRunning();
+                        }
+                        if (bPlayer != null && bPlayer.isPlaying()) {
+                            MusicStopRunning();
+                        }
                     } else {
                         if (HeartRate < 130) {
                             mplayer = MediaPlayer.create(getApplicationContext(), MusicList1.get(j));
@@ -188,23 +195,36 @@ public class MusicService extends Service implements LifecycleOwner {
                                     FadeIn.volumeGradient(mplayer, 0, 1);
                                     MusicList = 3;
                                 } else {
-                                    if (player != null && player.isPlaying()){ MusicStopRunning();}
-                                    if (bPlayer != null && bPlayer.isPlaying()){ MusicStopRunning(); }
+                                    if (player != null && player.isPlaying()) {
+                                        MusicStopRunning();
+                                    }
+                                    if (bPlayer != null && bPlayer.isPlaying()) {
+                                        MusicStopRunning();
+                                    }
                                 }
                             }
                         }
                     }
                     mplayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         public void onCompletion(MediaPlayer mp) {
-                            j=j+1;
+                            j = j + 1;
                             mplayer.stop();
                             mplayer.release();
                             mplayer = null;
-                            if(j<3) {MusicPlay();}
+                            if (j < 3) {
+                                MusicPlay();
+                            }
                         }
                     });
                 }
-            }, 60000); // 延时60秒
+            };
+            mHandler.postDelayed(mRun, 60000);
+        }
+    }
+
+    public void RemoveMusicCallBack(){
+        if(mHandler != null){
+            mHandler.removeCallbacksAndMessages(null);
         }
     }
 
@@ -259,13 +279,11 @@ public class MusicService extends Service implements LifecycleOwner {
             @Override
             public void onChanged(@Nullable Integer Cadence)
             {
-                if(mplayer != null && mplayer.isPlaying()){
                     switch(MusicList){
                         case 1: if(Cadence<100 || Cadence>130){Log.d(TAG, " Out of Range1! NoiseFlag: 1." );NoiseFlag = 1;}else{NoiseFlag = 0;Log.d(TAG, " In Range1! NoiseFlag: 0.");}break;
-                        case 2: if(Cadence<130 || Cadence>150){Log.d(TAG, " Out of Range2! BrownNoise On." );NoiseFlag = 1;}else{NoiseFlag = 0;}break;
-                        case 3: if(Cadence<150 || Cadence>170){Log.d(TAG, " Out of Range3! BrownNoise On." );NoiseFlag = 1;}else{NoiseFlag = 0;}break;
+                        case 2: if(Cadence<130 || Cadence>150){Log.d(TAG, " Out of Range2! NoiseFlag: 1." );NoiseFlag = 1;}else{NoiseFlag = 0;Log.d(TAG, " In Range2! NoiseFlag: 0.");}break;
+                        case 3: if(Cadence<150 || Cadence>170){Log.d(TAG, " Out of Range3! NoiseFlag: 1." );NoiseFlag = 1;}else{NoiseFlag = 0;Log.d(TAG, " In Range3! NoiseFlag: 0.");}break;
                     }
-                }
             }
         });
         CaStartPost();
@@ -298,7 +316,6 @@ public class MusicService extends Service implements LifecycleOwner {
                                 FadeIn.volumeGradient(bPlayer, 0, 1);
                             }
                         },6000); // 延时6秒
-                        Log.d(TAG, " NoiseFlag: 0->1.");
                 }
                 break;
                     case 0:if(bPlayer != null && bPlayer.isPlaying()){FadeIn.volumeGradient(bPlayer, 1, 0);
@@ -315,7 +332,6 @@ public class MusicService extends Service implements LifecycleOwner {
                             }
                         },6000); // 延时6秒
                         play();
-                        Log.d(TAG, " NoiseFlag: 1->0.");
                         break;}
             }
         }
@@ -351,7 +367,8 @@ public class MusicService extends Service implements LifecycleOwner {
             public void run() {
                 noiseFlagViewModel =  NoiseFlagViewModel.getsInstance();
                 final MutableLiveData<Integer> liveData = (MutableLiveData<Integer>)noiseFlagViewModel.getCurrentFlag();
-                liveData.postValue(NoiseFlag);
+                if(mplayer != null && mplayer.isPlaying()){
+                liveData.postValue(NoiseFlag);}
             }
         }, BEGIN_AFTER, INTERVAL);
     }
@@ -369,39 +386,5 @@ public class MusicService extends Service implements LifecycleOwner {
     }
 }
 
-class FadeIn {
-    public static void volumeGradient(final MediaPlayer mediaPlayer,
-                                      final float from, final float to) {
-        ValueAnimator animator = ValueAnimator.ofFloat(from, to);
-        animator.setDuration(6000); // 淡入时间
-        animator.setInterpolator(new LinearInterpolator());
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public void onAnimationUpdate(ValueAnimator it) {
-                float volume = (float) it.getAnimatedValue();
-                try {
-                    // 此时可能 mediaPlayer 状态发生了改变
-                    //,所以用try catch包裹,一旦发生错误,立马取消
-                    mediaPlayer.setVolume(volume, volume);
-                } catch (Exception e) {
-                    it.cancel();
-                }
-            }
-        });
-        animator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-            }
-            @Override
-            public void onAnimationEnd(Animator animation) {
-            }
-            @Override
-            public void onAnimationCancel(Animator animation) {
-            }
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-            }
-        });
-        animator.start();
-    }
-}
+
 

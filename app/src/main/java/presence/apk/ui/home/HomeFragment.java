@@ -121,6 +121,7 @@ public class HomeFragment extends Fragment {
 
     public void startStop() {
         if (timerRunning) {
+            RemoveCallBack();
             stop();
             countdownButton.setEnabled(false);
             new Handler().postDelayed(new Runnable() {
@@ -212,6 +213,8 @@ public class HomeFragment extends Fragment {
         musicController.stop();
     }
 
+    public void RemoveCallBack(){ musicController.RemoveCallBack(); }
+
     public void setDataInMusic(){ musicController.setData();}
 
     public void spRecord() { spController.onStart();}
@@ -246,7 +249,9 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         getActivity().stopService(spIntent);
+        getActivity().stopService(intent);
         getActivity().unregisterReceiver(receiver);
+        getActivity().unregisterReceiver(receiver1);
     }
 
     public void SetTextToNull(){
