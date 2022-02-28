@@ -122,6 +122,7 @@ public class HomeFragment extends Fragment {
     public void startStop() {
         if (timerRunning) {
             stop();
+            countdownButton.setEnabled(false);
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -184,6 +185,7 @@ public class HomeFragment extends Fragment {
         countDownTimer.cancel();
         timerRunning = false;
         timeLeftInMiliseconds = StartTimeInMiliseconds;
+        countdownButton.setEnabled(true);
         countdownButton.setText("Start running");
         updateTimer();
     }

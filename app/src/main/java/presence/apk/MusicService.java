@@ -16,6 +16,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -37,21 +38,17 @@ import java.util.TimerTask;
 import presence.apk.ui.home.HomeFragment;
 
 public class MusicService extends Service implements LifecycleOwner {
-    private int i = 0;
-    private int j = 0;
-    private static int MusicList = 0;
-    private static int HeartRate = 0;
-    private static int Cadence = 0;
+    private static int MusicList = 0, HeartRate = 0, Cadence = 0, NoiseFlag = 0, i = 0, j = 0;
+    private static int BEGIN_AFTER = 1000, INTERVAL = 7000;
     private MediaPlayer player;
     private MediaPlayer mplayer;
+    private MediaPlayer bPlayer;
     private MusicReceiver receiver;
-    ArrayList<Integer> NoiseList;
-    ArrayList<Integer> MusicList1;
-    ArrayList<Integer> MusicList2;
-    ArrayList<Integer> MusicList3;
-    private static int BEGIN_AFTER = 1000, INTERVAL = 10000;
+    ArrayList<Integer> NoiseList, MusicList1, MusicList2, MusicList3;
     private Timer timer = new Timer();
     MusicServiceViewModel musicServiceViewModel = new MusicServiceViewModel();
+    MusicServiceCaViewModel musicServiceCaViewModel = new MusicServiceCaViewModel();
+    NoiseFlagViewModel noiseFlagViewModel = new NoiseFlagViewModel();
     private LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
 
     @Nullable
@@ -93,6 +90,8 @@ public class MusicService extends Service implements LifecycleOwner {
     public void onCreate() {
         super.onCreate();
         iniComponent();
+        CaIniComponent();
+        FlagIniComponent();
         mLifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
 
         receiver = new MusicReceiver();
@@ -139,6 +138,15 @@ public class MusicService extends Service implements LifecycleOwner {
                 e.printStackTrace();
             }
         }
+        if (bPlayer != null && bPlayer.isPlaying()){
+            try{
+                bPlayer.stop();
+                bPlayer.release();
+                bPlayer = null;
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
     }
 
     public void MusicStopRunning(){
@@ -159,7 +167,8 @@ public class MusicService extends Service implements LifecycleOwner {
                 @Override
                 public void run() {
                     if (HeartRate < 100) {
-                        MusicStopRunning();
+                        if (player != null && player.isPlaying()){ MusicStopRunning(); }
+                        if (bPlayer != null && bPlayer.isPlaying()){ MusicStopRunning(); }
                     } else {
                         if (HeartRate < 130) {
                             mplayer = MediaPlayer.create(getApplicationContext(), MusicList1.get(j));
@@ -179,7 +188,8 @@ public class MusicService extends Service implements LifecycleOwner {
                                     FadeIn.volumeGradient(mplayer, 0, 1);
                                     MusicList = 3;
                                 } else {
-                                    MusicStopRunning();
+                                    if (player != null && player.isPlaying()){ MusicStopRunning();}
+                                    if (bPlayer != null && bPlayer.isPlaying()){ MusicStopRunning(); }
                                 }
                             }
                         }
@@ -204,7 +214,7 @@ public class MusicService extends Service implements LifecycleOwner {
             player = MediaPlayer.create(this, NoiseList.get(i));
             player.start();
             FadeIn.volumeGradient(player, 0, 1);
-        }
+
        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
            public void onCompletion(MediaPlayer mp) {
                 i=i+1;
@@ -213,7 +223,7 @@ public class MusicService extends Service implements LifecycleOwner {
                 player = null;
                 play();
            }
-       });
+       }); }
     }
 
     public void setDataInMusic(){
@@ -241,6 +251,78 @@ public class MusicService extends Service implements LifecycleOwner {
         startPost();
     }
 
+    private void CaIniComponent()
+    {
+        //通过.observe()实现对ViewModel中数据变化的观察
+        MusicServiceCaViewModel.getsInstance().getCurrentCa().observe(this, new Observer<Integer>()
+        {
+            @Override
+            public void onChanged(@Nullable Integer Cadence)
+            {
+                if(mplayer != null && mplayer.isPlaying()){
+                    switch(MusicList){
+                        case 1: if(Cadence<100 || Cadence>130){Log.d(TAG, " Out of Range1! NoiseFlag: 1." );NoiseFlag = 1;}else{NoiseFlag = 0;Log.d(TAG, " In Range1! NoiseFlag: 0.");}break;
+                        case 2: if(Cadence<130 || Cadence>150){Log.d(TAG, " Out of Range2! BrownNoise On." );NoiseFlag = 1;}else{NoiseFlag = 0;}break;
+                        case 3: if(Cadence<150 || Cadence>170){Log.d(TAG, " Out of Range3! BrownNoise On." );NoiseFlag = 1;}else{NoiseFlag = 0;}break;
+                    }
+                }
+            }
+        });
+        CaStartPost();
+    }
+
+    private void FlagIniComponent()
+    {
+        //通过.observe()实现对ViewModel中数据变化的观察
+       NoiseFlagViewModel.getsInstance().getCurrentFlag().observe(this, new Observer<Integer>()
+        {
+            @Override
+            public void onChanged(@Nullable Integer Flag)
+            {
+                switch (Flag){
+                    case 1: if (bPlayer != null && bPlayer.isPlaying()){}else{
+                        FadeIn.volumeGradient(player, 1, 0);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                try{
+                                    player.stop();
+                                    player.release();
+                                    player = null;
+                                }catch(Exception e){
+                                    e.printStackTrace();
+                                }
+                                bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.brownoise);
+                                bPlayer.start();
+                                bPlayer.setLooping(true);
+                                FadeIn.volumeGradient(bPlayer, 0, 1);
+                            }
+                        },6000); // 延时6秒
+                        Log.d(TAG, " NoiseFlag: 0->1.");
+                }
+                break;
+                    case 0:if(bPlayer != null && bPlayer.isPlaying()){FadeIn.volumeGradient(bPlayer, 1, 0);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    bPlayer.stop();
+                                    bPlayer.release();
+                                    bPlayer = null;
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },6000); // 延时6秒
+                        play();
+                        Log.d(TAG, " NoiseFlag: 1->0.");
+                        break;}
+            }
+        }
+        }) ;
+        FlagStartPost();
+    }
+
     public void startPost(){
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -248,6 +330,28 @@ public class MusicService extends Service implements LifecycleOwner {
                 musicServiceViewModel =  MusicServiceViewModel.getsInstance();
                 final MutableLiveData<Integer> liveData = (MutableLiveData<Integer>)musicServiceViewModel.getCurrentHR();
                 liveData.postValue(HeartRate);
+            }
+        }, BEGIN_AFTER, INTERVAL);
+    }
+
+    public void CaStartPost(){
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                musicServiceCaViewModel =  MusicServiceCaViewModel.getsInstance();
+                final MutableLiveData<Integer> liveData = (MutableLiveData<Integer>)musicServiceCaViewModel.getCurrentCa();
+                liveData.postValue(Cadence);
+            }
+        }, BEGIN_AFTER, INTERVAL);
+    }
+
+    public void FlagStartPost(){
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                noiseFlagViewModel =  NoiseFlagViewModel.getsInstance();
+                final MutableLiveData<Integer> liveData = (MutableLiveData<Integer>)noiseFlagViewModel.getCurrentFlag();
+                liveData.postValue(NoiseFlag);
             }
         }, BEGIN_AFTER, INTERVAL);
     }
