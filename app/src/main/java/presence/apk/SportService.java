@@ -99,6 +99,7 @@ public class SportService extends Service {
                     Intent intent = new Intent("action.sport");
                     intent.putExtra(HiHealthKitConstant.BUNDLE_KEY_STEP_RATE, bundle.getInt(HiHealthKitConstant.BUNDLE_KEY_STEP_RATE));
                     intent.putExtra(HiHealthKitConstant.BUNDLE_KEY_HEARTRATE, bundle.getInt(HiHealthKitConstant.BUNDLE_KEY_HEARTRATE));
+                    intent.putExtra(HiHealthKitConstant.BUNDLE_KEY_CALORIE, bundle.getInt(HiHealthKitConstant.BUNDLE_KEY_CALORIE));
                     sendBroadcast(intent);
                 }
             }

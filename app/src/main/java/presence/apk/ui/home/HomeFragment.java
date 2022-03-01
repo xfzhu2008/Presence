@@ -36,9 +36,7 @@ import presence.apk.SportService;
 
 public class HomeFragment extends Fragment {
 
-    private TextView countdownText;
-    private TextView HeartRateText;
-    private TextView CadenceText;
+    private TextView countdownText, HeartRateText, CadenceText, CalorieText, StatusText, HRStatusText;
     private Button countdownButton;
 
     private MusicService.MusicController musicController;
@@ -58,6 +56,8 @@ public class HomeFragment extends Fragment {
 
     private SportReceiver receiver;
     private StopRunReceiver receiver1;
+    private StatusInfoReceiver receiver2;
+    private HRStatusInfoReceiver receiver3;
 
     @Nullable
     @Override
@@ -67,6 +67,9 @@ public class HomeFragment extends Fragment {
         countdownText = view.findViewById(R.id.countdown_text);
         HeartRateText = view.findViewById(R.id.HeartRate);
         CadenceText = view.findViewById(R.id.Cadence);
+        CalorieText = view.findViewById(R.id.Calorie);
+        StatusText = view.findViewById(R.id.Status);
+        HRStatusText = view.findViewById(R.id.HRStatus);
         countdownButton = view.findViewById(R.id.countdownbutton);
 
         countdownButton.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +97,14 @@ public class HomeFragment extends Fragment {
         IntentFilter filter1 = new IntentFilter("action.StopRunning");
         getActivity().registerReceiver(receiver1, filter1);
 
+        receiver2 = new StatusInfoReceiver();
+        IntentFilter filter2 = new IntentFilter("action.Status");
+        getActivity().registerReceiver(receiver2, filter2);
+
+        receiver3 = new HRStatusInfoReceiver();
+        IntentFilter filter3 = new IntentFilter("action.HRStatus");
+        getActivity().registerReceiver(receiver3, filter3);
+
         updateTimer();
         return view;
     }
@@ -117,6 +128,7 @@ public class HomeFragment extends Fragment {
             AddWakeLock();
             startTimer();
             play();
+            HRStatusText.setText(" ");
         }
     }
 
@@ -146,6 +158,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFinish() {
                 stop();
+                countdownButton.setEnabled(false);
+                StatusText.setText("Congratulation! Mindfulness running succeed");
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -231,6 +245,7 @@ public class HomeFragment extends Fragment {
         getActivity().stopService(intent);
         getActivity().unregisterReceiver(receiver);
         getActivity().unregisterReceiver(receiver1);
+        getActivity().unregisterReceiver(receiver2);
     }
 
     public void SetTextToNull(){
@@ -239,6 +254,7 @@ public class HomeFragment extends Fragment {
             public void run() {
                 HeartRateText.setText("--");
                 CadenceText.setText("--");
+                CalorieText.setText("--");
                 setDataInMusic();
             }
         },5000); // 延时5秒
@@ -250,6 +266,26 @@ public class HomeFragment extends Fragment {
             if ("action.sport".equals(intent.getAction())) {
                 CadenceText.setText(String.valueOf(intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_STEP_RATE, 0)));
                 HeartRateText.setText(String.valueOf(intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_HEARTRATE, 0)));
+                int calorie = intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_CALORIE, 0);
+                CalorieText.setText(calorie / 1000 + " kcal");
+            }
+        }
+    }
+
+    class StatusInfoReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if ("action.Status".equals(intent.getAction())) {
+                StatusText.setText(intent.getStringExtra("Status"));
+            }
+        }
+    }
+
+    class HRStatusInfoReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if ("action.HRStatus".equals(intent.getAction())) {
+                HRStatusText.setText(intent.getStringExtra("HRStatus"));
             }
         }
     }
