@@ -105,6 +105,8 @@ public class MusicService extends Service implements LifecycleOwner {
         MusicList1 = new ArrayList<>();
         MusicList1.add(R.raw.miles);
         MusicList1.add(R.raw.jazen120);
+        MusicList1.add(R.raw.tearscity);
+        MusicList1.add(R.raw.kumamoto);
         Collections.shuffle(MusicList1);
         MusicList2 = new ArrayList<>();
         MusicList2.add(R.raw.japannight);

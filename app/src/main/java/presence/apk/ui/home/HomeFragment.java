@@ -27,6 +27,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.huawei.hihealthkit.data.HiHealthKitConstant;
 
 
@@ -75,9 +76,15 @@ public class HomeFragment extends Fragment {
         countdownButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(timerRunning){
+                    Snackbar.make(view, "BioData stop recording...", Snackbar.LENGTH_SHORT).show();
+                }else{
+                    Snackbar.make(view, "BioData recording...", Snackbar.LENGTH_SHORT).show();
+                }
                 startStop();
             }
         });
+
 
         intent = new Intent(getActivity(), MusicService.class);
         getActivity().startService(intent);
