@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -29,6 +30,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.huawei.hihealthkit.data.HiHealthKitConstant;
+import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 
 import presence.apk.MusicService;
@@ -72,19 +74,42 @@ public class HomeFragment extends Fragment {
         StatusText = view.findViewById(R.id.Status);
         HRStatusText = view.findViewById(R.id.HRStatus);
         countdownButton = view.findViewById(R.id.countdownbutton);
+        CircularProgressBar circularProgressBar = view.findViewById(R.id.circularProgressBar);
 
         countdownButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(timerRunning){
                     Snackbar.make(view, "BioData stop recording...", Snackbar.LENGTH_SHORT).show();
+                    circularProgressBar.setProgressWithAnimation(0f, 1000L); // =1s
                 }else{
                     Snackbar.make(view, "BioData recording...", Snackbar.LENGTH_SHORT).show();
+                    circularProgressBar.setProgressWithAnimation(100f, 1200000L); // =1s
                 }
                 startStop();
             }
         });
 
+
+// Set Progress Max
+        circularProgressBar.setProgressMax(100f);
+
+// Set ProgressBar Color with gradient
+        circularProgressBar.setProgressBarColorStart(Color.BLUE);
+        circularProgressBar.setProgressBarColorEnd(Color.RED);
+        circularProgressBar.setProgressBarColorDirection(CircularProgressBar.GradientDirection.TOP_TO_BOTTOM);
+
+// Set background ProgressBar Color
+        circularProgressBar.setBackgroundProgressBarColor(Color.GRAY);
+
+// Set Width
+        circularProgressBar.setProgressBarWidth(4f); // in DP
+        circularProgressBar.setBackgroundProgressBarWidth(4f); // in DP
+
+// Other
+        circularProgressBar.setRoundBorder(true);
+        circularProgressBar.setStartAngle(0f);
+        circularProgressBar.setProgressDirection(CircularProgressBar.ProgressDirection.TO_RIGHT);
 
         intent = new Intent(getActivity(), MusicService.class);
         getActivity().startService(intent);
@@ -164,6 +189,10 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFinish() {
+                View view = new View(getActivity());
+                CircularProgressBar circularProgressBar =view.findViewById(R.id.circularProgressBar);
+                circularProgressBar.setProgressWithAnimation(0f, 1000L);
+                Snackbar.make(view, "BioData stop recording...", Snackbar.LENGTH_SHORT).show();
                 stop();
                 countdownButton.setEnabled(false);
                 StatusText.setText("Congratulation! Mindfulness running succeed");
@@ -301,6 +330,10 @@ public class HomeFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if ("action.StopRunning".equals(intent.getAction())) {
+                View view = new View(getActivity());
+                CircularProgressBar circularProgressBar =view.findViewById(R.id.circularProgressBar);
+                circularProgressBar.setProgressWithAnimation(0f, 1000L);
+                Snackbar.make(view, "BioData stop recording...", Snackbar.LENGTH_SHORT).show();
                 startStop();
             }
         }
