@@ -84,7 +84,7 @@ public class HomeFragment extends Fragment {
                     circularProgressBar.setProgressWithAnimation(0f, 1000L); // =1s
                 }else{
                     Snackbar.make(view, "BioData recording...", Snackbar.LENGTH_SHORT).show();
-                    circularProgressBar.setProgressWithAnimation(100f, 1200000L); // =1s
+                    circularProgressBar.setProgressWithAnimation(100f, 1200000L); //
                 }
                 startStop();
             }
@@ -189,10 +189,10 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFinish() {
-                View view = new View(getActivity());
-                CircularProgressBar circularProgressBar =view.findViewById(R.id.circularProgressBar);
-                circularProgressBar.setProgressWithAnimation(0f, 1000L);
+                View view = getView();
                 Snackbar.make(view, "BioData stop recording...", Snackbar.LENGTH_SHORT).show();
+                CircularProgressBar circularProgressBar = view.findViewById(R.id.circularProgressBar);
+                circularProgressBar.setProgressWithAnimation(0f, 1000L); // =1s
                 stop();
                 countdownButton.setEnabled(false);
                 StatusText.setText("Congratulation! Mindfulness running succeed");
@@ -330,10 +330,10 @@ public class HomeFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if ("action.StopRunning".equals(intent.getAction())) {
-                View view = new View(getActivity());
-                CircularProgressBar circularProgressBar =view.findViewById(R.id.circularProgressBar);
-                circularProgressBar.setProgressWithAnimation(0f, 1000L);
+                View view = getView();
                 Snackbar.make(view, "BioData stop recording...", Snackbar.LENGTH_SHORT).show();
+                CircularProgressBar circularProgressBar = view.findViewById(R.id.circularProgressBar);
+                circularProgressBar.setProgressWithAnimation(0f, 1000L); // =1s
                 startStop();
             }
         }

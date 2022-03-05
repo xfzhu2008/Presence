@@ -110,11 +110,13 @@ public class MusicService extends Service implements LifecycleOwner {
         Collections.shuffle(MusicList1);
         MusicList2 = new ArrayList<>();
         MusicList2.add(R.raw.japannight);
- //       MusicList2.add(R.raw.river);
+        MusicList2.add(R.raw.jazen132);
+        MusicList2.add(R.raw.monet);
         Collections.shuffle(MusicList2);
         MusicList3 = new ArrayList<>();
         MusicList3.add(R.raw.solarechoes);
- //       MusicList3.add(R.raw.river);
+        MusicList3.add(R.raw.jazen150);
+        MusicList3.add(R.raw.ori);
         Collections.shuffle(MusicList3);
     }
 
@@ -307,6 +309,7 @@ public class MusicService extends Service implements LifecycleOwner {
             @Override
             public void onChanged(@Nullable Integer Cadence)
             {
+                if(mplayer != null && mplayer.isPlaying()){
                     switch(MusicList){
                         case 1: if(Cadence<100 || Cadence>130){
                             Intent intent = new Intent("action.Status");
@@ -319,7 +322,7 @@ public class MusicService extends Service implements LifecycleOwner {
                             intent.putExtra("Status","Well done! Keep your pace.");
                             sendBroadcast(intent);;
                         }break;
-                        case 2: if(Cadence<130 || Cadence>150){
+                        case 2: if(Cadence<120 || Cadence>150){
                             Intent intent = new Intent("action.Status");
                             intent.putExtra("Status","Cadence out of Range(130-150)!");
                             sendBroadcast(intent);
@@ -330,7 +333,7 @@ public class MusicService extends Service implements LifecycleOwner {
                             intent.putExtra("Status","Well done! Keep your pace.");
                             sendBroadcast(intent);
                         }break;
-                        case 3: if(Cadence<150 || Cadence>170){
+                        case 3: if(Cadence<140 || Cadence>170){
                             Intent intent = new Intent("action.Status");
                             intent.putExtra("Status","Cadence out of Range(150-170)!");
                             sendBroadcast(intent);
@@ -342,6 +345,7 @@ public class MusicService extends Service implements LifecycleOwner {
                             sendBroadcast(intent);
                         }break;
                     }
+                }
             }
         });
         CaStartPost();
