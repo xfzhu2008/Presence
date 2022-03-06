@@ -282,13 +282,13 @@ public class MusicService extends Service implements LifecycleOwner {
                             sendBroadcast(intent);
                             MusicStopRunning();
                         }break;
-                        case 2: if(HR<130 || HR>150){
+                        case 2: if(HR<120 || HR>150){
                             Intent intent = new Intent("action.HRStatus");
                             intent.putExtra("HRStatus","Heart rate out of range(130-150)! Retry.");
                             sendBroadcast(intent);
                             MusicStopRunning();
                         }break;
-                        case 3: if(HR<150 || HR>170){
+                        case 3: if(HR<140 || HR>170){
                             Intent intent = new Intent("action.HRStatus");
                             intent.putExtra("HRStatus","Heart rate out of range(150-170)! Retry.");
                             sendBroadcast(intent);
