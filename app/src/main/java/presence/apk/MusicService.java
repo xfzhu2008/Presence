@@ -29,7 +29,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MusicService extends Service implements LifecycleOwner {
-    private static int MusicList = 0, HeartRate = 0, Cadence = 0, NoiseFlag = 0, i = 0, j = 0;
+    private static int MusicList = 0, HeartRate = 0, Cadence = 0, NoiseFlag = 0, HRFlag = 1, i = 0, j = 0;
     private final static int BEGIN_AFTER = 1000, INTERVAL = 10000;
     private MediaPlayer player;
     private MediaPlayer mplayer;
@@ -42,6 +42,7 @@ public class MusicService extends Service implements LifecycleOwner {
     MusicServiceCaViewModel musicServiceCaViewModel = new MusicServiceCaViewModel();
     NoiseFlagViewModel noiseFlagViewModel = new NoiseFlagViewModel();
     private LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
+
 
     @Nullable
     @Override
@@ -64,7 +65,9 @@ public class MusicService extends Service implements LifecycleOwner {
             }
             public void stop(){
                 if (mplayer != null && mplayer.isPlaying()) {
-                    FadeIn.volumeGradient(mplayer, 1, 0);}
+                    if(HRFlag==1){FadeIn.volumeGradient(mplayer, 1f, 0);}
+                    if(HRFlag==0){FadeIn.volumeGradient(mplayer, 0.3f, 0);}
+                }
                 if (bPlayer != null && bPlayer.isPlaying()) {
                     FadeIn.volumeGradient(bPlayer, 1, 0);}
                 if (player != null && player.isPlaying()) {
@@ -281,19 +284,37 @@ public class MusicService extends Service implements LifecycleOwner {
                             intent.putExtra("HRStatus","Heart rate out of range(100-130)! Retry.");
                             sendBroadcast(intent);
                             MusicStopRunning();
-                        }break;
+                        }else if(HR<125 && HR>105){
+                            if(HRFlag==0){FadeIn.volumeGradient(mplayer, 0.3f, 1f); }
+                            HRFlag=1;}
+                            else{
+                            if(HRFlag==1){FadeIn.volumeGradient(mplayer, 1f, 0.3f);}
+                            HRFlag=0;}
+                        break;
                         case 2: if(HR<120 || HR>150){
                             Intent intent = new Intent("action.HRStatus");
                             intent.putExtra("HRStatus","Heart rate out of range(130-150)! Retry.");
                             sendBroadcast(intent);
                             MusicStopRunning();
-                        }break;
+                        }else if(HR<145 && HR>125){
+                            if(HRFlag==0){FadeIn.volumeGradient(mplayer, 0.3f, 1f); }
+                            HRFlag=1;}
+                        else{
+                            if(HRFlag==1){FadeIn.volumeGradient(mplayer, 1f, 0.3f);}
+                            HRFlag=0;}
+                        break;
                         case 3: if(HR<140 || HR>170){
                             Intent intent = new Intent("action.HRStatus");
                             intent.putExtra("HRStatus","Heart rate out of range(150-170)! Retry.");
                             sendBroadcast(intent);
                             MusicStopRunning();
-                        }break;
+                        }else if(HR<165 && HR>145){
+                            if(HRFlag==0){FadeIn.volumeGradient(mplayer, 0.3f, 1f); }
+                            HRFlag=1;}
+                        else{
+                            if(HRFlag==1){FadeIn.volumeGradient(mplayer, 1f, 0.3f);}
+                            HRFlag=0;}
+                        break;
                     }
                 }
             }
@@ -375,7 +396,6 @@ public class MusicService extends Service implements LifecycleOwner {
                                 bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.brownoise);
                                 bPlayer.start();
                                 bPlayer.setLooping(true);
-                                FadeIn.volumeGradient(bPlayer, 0, 1);
                             }
                         },6000); // 延时6秒
                 }
