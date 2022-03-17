@@ -63,9 +63,9 @@ public class MusicService extends Service implements LifecycleOwner {
                 MusicService.this.MusicPlay();
             }
             public void stop(){
+                HRCheckFlag = 0;
+                CaCheckFlag = 0;
                 if (mplayer != null && mplayer.isPlaying()) {
-                    HRCheckFlag = 0;
-                    CaCheckFlag = 0;
                     if(HRFlag==1){FadeIn.volumeGradient(mplayer, 1f, 0);}
                     if(HRFlag==0){FadeIn.volumeGradient(mplayer, 0.3f, 0);}
                 }
