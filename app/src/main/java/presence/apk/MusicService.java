@@ -29,15 +29,15 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MusicService extends Service implements LifecycleOwner {
-    private static int MusicList = 0, HeartRate = 0, Cadence = 0, NoiseFlag = 0, HRFlag = 1, i = 0, j = 0;
+    private static int MusicList = 0, HeartRate = 0, Cadence = 0, CadenceOnMusicStart = 0, NoiseFlag = 0, HRFlag = 1, CaCheckFlag = 0, i = 0, j = 0;
     private final static int BEGIN_AFTER = 1000, INTERVAL = 10000;
     private MediaPlayer player;
     private MediaPlayer mplayer;
     private MediaPlayer bPlayer;
     private MusicReceiver receiver;
     ArrayList<Integer> NoiseList, MusicList1, MusicList2, MusicList3;
-    private Timer timer = new Timer();
-    private Handler mHandler = new Handler();
+    private final Timer timer = new Timer();
+    private final Handler mHandler = new Handler();
     MusicServiceViewModel musicServiceViewModel = new MusicServiceViewModel();
     MusicServiceCaViewModel musicServiceCaViewModel = new MusicServiceCaViewModel();
     NoiseFlagViewModel noiseFlagViewModel = new NoiseFlagViewModel();
@@ -47,7 +47,6 @@ public class MusicService extends Service implements LifecycleOwner {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
         mLifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_RESUME);
         return new MusicController();
     }
@@ -191,6 +190,13 @@ public class MusicService extends Service implements LifecycleOwner {
                             Intent intent = new Intent("action.Status");
                             intent.putExtra("Status","Well done! Keep your pace.");
                             sendBroadcast(intent);
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    CadenceOnMusicStart = Cadence;
+                                    CaCheckFlag = 1;
+                                }
+                            },20000); // 延时20秒
                         } else {
                             if (HeartRate < 150) {
                                 mplayer = MediaPlayer.create(getApplicationContext(), MusicList2.get(j));
@@ -200,6 +206,13 @@ public class MusicService extends Service implements LifecycleOwner {
                                 Intent intent = new Intent("action.Status");
                                 intent.putExtra("Status","Well done! Keep your pace.");
                                 sendBroadcast(intent);
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        CadenceOnMusicStart = Cadence;
+                                        CaCheckFlag = 1;
+                                    }
+                                },20000); // 延时20秒
                             } else {
                                 if (HeartRate < 170) {
                                     mplayer = MediaPlayer.create(getApplicationContext(), MusicList3.get(j));
@@ -209,6 +222,13 @@ public class MusicService extends Service implements LifecycleOwner {
                                     Intent intent = new Intent("action.Status");
                                     intent.putExtra("Status","Well done! Keep your pace.");
                                     sendBroadcast(intent);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            CadenceOnMusicStart = Cadence;
+                                            CaCheckFlag = 1;
+                                        }
+                                    },20000); // 延时20秒
                                 } else {
                                     Intent intent = new Intent("action.Status");
                                     intent.putExtra("Status","Too fast! Run slower.");
@@ -229,6 +249,7 @@ public class MusicService extends Service implements LifecycleOwner {
                             mplayer.stop();
                             mplayer.release();
                             mplayer = null;
+                            CaCheckFlag = 0;
                             if (j < 3) {
                                 MusicPlay();
                             }
@@ -293,7 +314,7 @@ public class MusicService extends Service implements LifecycleOwner {
                         break;
                         case 2: if(HR<120 || HR>150){
                             Intent intent = new Intent("action.HRStatus");
-                            intent.putExtra("HRStatus","Heart rate out of range(130-150)! Retry.");
+                            intent.putExtra("HRStatus","Heart rate out of range(120-150)! Retry.");
                             sendBroadcast(intent);
                             MusicStopRunning();
                         }else if(HR<145 && HR>125){
@@ -305,7 +326,7 @@ public class MusicService extends Service implements LifecycleOwner {
                         break;
                         case 3: if(HR<140 || HR>170){
                             Intent intent = new Intent("action.HRStatus");
-                            intent.putExtra("HRStatus","Heart rate out of range(150-170)! Retry.");
+                            intent.putExtra("HRStatus","Heart rate out of range(140-170)! Retry.");
                             sendBroadcast(intent);
                             MusicStopRunning();
                         }else if(HR<165 && HR>145){
@@ -330,8 +351,19 @@ public class MusicService extends Service implements LifecycleOwner {
             @Override
             public void onChanged(@Nullable Integer Cadence)
             {
-                if(mplayer != null && mplayer.isPlaying()){
-                    switch(MusicList){
+                if(CaCheckFlag == 1){
+                  if (Cadence < (CadenceOnMusicStart-20) || Cadence > (CadenceOnMusicStart+20)){
+                      Intent intent = new Intent("action.Status");
+                      intent.putExtra("Status","Cadence out of Range!");
+                      sendBroadcast(intent);
+                      NoiseFlag = 1;
+                  }else{
+                      NoiseFlag = 0;
+                      Intent intent = new Intent("action.Status");
+                      intent.putExtra("Status","Well done! Keep your pace.");
+                      sendBroadcast(intent);
+                  }
+              /*      switch(MusicList){
                         case 1: if(Cadence<100 || Cadence>130){
                             Intent intent = new Intent("action.Status");
                             intent.putExtra("Status","Cadence out of Range(100-130)!");
@@ -341,7 +373,7 @@ public class MusicService extends Service implements LifecycleOwner {
                             NoiseFlag = 0;
                             Intent intent = new Intent("action.Status");
                             intent.putExtra("Status","Well done! Keep your pace.");
-                            sendBroadcast(intent);;
+                            sendBroadcast(intent);
                         }break;
                         case 2: if(Cadence<120 || Cadence>150){
                             Intent intent = new Intent("action.Status");
@@ -365,7 +397,7 @@ public class MusicService extends Service implements LifecycleOwner {
                             intent.putExtra("Status","Well done! Keep your pace.");
                             sendBroadcast(intent);
                         }break;
-                    }
+                    }*/
                 }
             }
         });

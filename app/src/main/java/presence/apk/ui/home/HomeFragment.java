@@ -39,7 +39,7 @@ import presence.apk.SportService;
 
 public class HomeFragment extends Fragment {
 
-    private TextView countdownText, HeartRateText, CadenceText, CalorieText, StatusText, HRStatusText;
+    private TextView countdownText, HeartRateText, CadenceText, CalorieText, StatusText, HRStatusText, DistanceText;
     private Button countdownButton;
 
     private MusicService.MusicController musicController;
@@ -71,6 +71,7 @@ public class HomeFragment extends Fragment {
         HeartRateText = view.findViewById(R.id.HeartRate);
         CadenceText = view.findViewById(R.id.Cadence);
         CalorieText = view.findViewById(R.id.Calorie);
+        DistanceText = view.findViewById(R.id.Distance);
         StatusText = view.findViewById(R.id.Status);
         HRStatusText = view.findViewById(R.id.HRStatus);
         countdownButton = view.findViewById(R.id.countdownbutton);
@@ -304,6 +305,9 @@ public class HomeFragment extends Fragment {
                 HeartRateText.setText(String.valueOf(intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_HEARTRATE, 0)));
                 int calorie = intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_CALORIE, 0);
                 CalorieText.setText(calorie / 1000 + " kcal");
+                float distance = intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_DISTANCE, 0);
+                String dis = String.valueOf(distance/1000);
+                DistanceText.setText(dis + " km");
             }
         }
     }
