@@ -29,7 +29,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MusicService extends Service implements LifecycleOwner {
-    private static int MusicList = 0, HeartRate = 0, Cadence = 0, CadenceOnMusicStart = 0, NoiseFlag = 0, HRFlag = 1, CaCheckFlag = 0, i = 0, j = 0;
+    private static int HeartRate = 0, Cadence = 0, CadenceOnMusicStart = 0, HeartRateOnMusicStart = 0, NoiseFlag = 0, HRFlag = 1, HRCheckFlag = 0, CaCheckFlag = 0, i = 0, j = 0;
     private final static int BEGIN_AFTER = 1000, INTERVAL = 10000;
     private MediaPlayer player;
     private MediaPlayer mplayer;
@@ -64,6 +64,8 @@ public class MusicService extends Service implements LifecycleOwner {
             }
             public void stop(){
                 if (mplayer != null && mplayer.isPlaying()) {
+                    HRCheckFlag = 0;
+                    CaCheckFlag = 0;
                     if(HRFlag==1){FadeIn.volumeGradient(mplayer, 1f, 0);}
                     if(HRFlag==0){FadeIn.volumeGradient(mplayer, 0.3f, 0);}
                 }
@@ -186,7 +188,6 @@ public class MusicService extends Service implements LifecycleOwner {
                             mplayer = MediaPlayer.create(getApplicationContext(), MusicList1.get(j));
                             mplayer.start();
                             FadeIn.volumeGradient(mplayer, 0, 1);
-                            MusicList = 1;
                             Intent intent = new Intent("action.Status");
                             intent.putExtra("Status","Well done! Keep your pace.");
                             sendBroadcast(intent);
@@ -194,7 +195,9 @@ public class MusicService extends Service implements LifecycleOwner {
                                 @Override
                                 public void run() {
                                     CadenceOnMusicStart = Cadence;
+                                    HeartRateOnMusicStart = HeartRate;
                                     CaCheckFlag = 1;
+                                    HRCheckFlag = 1;
                                 }
                             },20000); // 延时20秒
                         } else {
@@ -202,7 +205,6 @@ public class MusicService extends Service implements LifecycleOwner {
                                 mplayer = MediaPlayer.create(getApplicationContext(), MusicList2.get(j));
                                 mplayer.start();
                                 FadeIn.volumeGradient(mplayer, 0, 1);
-                                MusicList = 2;
                                 Intent intent = new Intent("action.Status");
                                 intent.putExtra("Status","Well done! Keep your pace.");
                                 sendBroadcast(intent);
@@ -210,7 +212,9 @@ public class MusicService extends Service implements LifecycleOwner {
                                     @Override
                                     public void run() {
                                         CadenceOnMusicStart = Cadence;
+                                        HeartRateOnMusicStart = HeartRate;
                                         CaCheckFlag = 1;
+                                        HRCheckFlag = 1;
                                     }
                                 },20000); // 延时20秒
                             } else {
@@ -218,7 +222,6 @@ public class MusicService extends Service implements LifecycleOwner {
                                     mplayer = MediaPlayer.create(getApplicationContext(), MusicList3.get(j));
                                     mplayer.start();
                                     FadeIn.volumeGradient(mplayer, 0, 1);
-                                    MusicList = 3;
                                     Intent intent = new Intent("action.Status");
                                     intent.putExtra("Status","Well done! Keep your pace.");
                                     sendBroadcast(intent);
@@ -226,7 +229,9 @@ public class MusicService extends Service implements LifecycleOwner {
                                         @Override
                                         public void run() {
                                             CadenceOnMusicStart = Cadence;
+                                            HeartRateOnMusicStart = HeartRate;
                                             CaCheckFlag = 1;
+                                            HRCheckFlag = 1;
                                         }
                                     },20000); // 延时20秒
                                 } else {
@@ -250,6 +255,7 @@ public class MusicService extends Service implements LifecycleOwner {
                             mplayer.release();
                             mplayer = null;
                             CaCheckFlag = 0;
+                            HRCheckFlag = 0;
                             if (j < 3) {
                                 MusicPlay();
                             }
@@ -298,8 +304,26 @@ public class MusicService extends Service implements LifecycleOwner {
             @Override
             public void onChanged(@Nullable Integer HR)
             {
-                if(mplayer != null && mplayer.isPlaying()){
-                    switch(MusicList){
+                if(HRCheckFlag == 1){
+                    if(HR<100 || HR>170){
+                            Intent intent = new Intent("action.HRStatus");
+                            intent.putExtra("HRStatus","Invalid Running Exercise! Retry.");
+                            sendBroadcast(intent);
+                            MusicStopRunning();
+                    }else if(HR < (HeartRateOnMusicStart-20) || HR > (HeartRateOnMusicStart+20)) {
+                            Intent intent = new Intent("action.HRStatus");
+                            intent.putExtra("HRStatus", "Heart rate out of range! Retry.");
+                            sendBroadcast(intent);
+                            MusicStopRunning();
+                    }else if(HR < (HeartRateOnMusicStart-15) || HR > (HeartRateOnMusicStart+15) || HR<105 || HR>165){
+                            if(HRFlag==1){FadeIn.volumeGradient(mplayer, 1f, 0.3f);}
+                            HRFlag=0;
+                    }
+                    else{
+                            if(HRFlag==0){ FadeIn.volumeGradient(mplayer, 0.3f, 1f); }
+                            HRFlag=1;
+                    }
+/*                    switch(MusicList){
                         case 1: if(HR<100 || HR>130){
                             Intent intent = new Intent("action.HRStatus");
                             intent.putExtra("HRStatus","Heart rate out of range(100-130)! Retry.");
@@ -336,7 +360,7 @@ public class MusicService extends Service implements LifecycleOwner {
                             if(HRFlag==1){FadeIn.volumeGradient(mplayer, 1f, 0.3f);}
                             HRFlag=0;}
                         break;
-                    }
+                    }*/
                 }
             }
         });
