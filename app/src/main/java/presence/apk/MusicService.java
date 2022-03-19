@@ -315,7 +315,7 @@ public class MusicService extends Service implements LifecycleOwner {
                             intent.putExtra("HRStatus", "Heart rate out of range! Retry.");
                             sendBroadcast(intent);
                             MusicStopRunning();
-                    }else if(HR < (HeartRateOnMusicStart-15) || HR > (HeartRateOnMusicStart+15) || HR<105 || HR>165){
+                    }else if(HR < (HeartRateOnMusicStart-13) || HR > (HeartRateOnMusicStart+13) || HR<107 || HR>163){
                             if(HRFlag==1){FadeIn.volumeGradient(mplayer, 1f, 0.3f);}
                             HRFlag=0;
                     }
