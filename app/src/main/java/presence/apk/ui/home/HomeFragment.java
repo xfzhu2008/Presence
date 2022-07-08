@@ -49,8 +49,8 @@ public class HomeFragment extends Fragment {
     private PowerManager.WakeLock wl;
 
     private CountDownTimer countDownTimer;
-    private long timeLeftInMiliseconds = 1200000; //20mins
-    private final long StartTimeInMiliseconds = 1200000; //20mins
+    private long timeLeftInMiliseconds = 600000; //10mins
+    private final long StartTimeInMiliseconds = 600000; //10mins
     private boolean timerRunning;
 
     private Intent spIntent;
@@ -58,7 +58,6 @@ public class HomeFragment extends Fragment {
     private SportServiceConn spConn;
 
     private SportReceiver receiver;
-    private StopRunReceiver receiver1;
     private StatusInfoReceiver receiver2;
     private HRStatusInfoReceiver receiver3;
 
@@ -125,10 +124,6 @@ public class HomeFragment extends Fragment {
         receiver = new SportReceiver();
         IntentFilter filter = new IntentFilter("action.sport");
         getActivity().registerReceiver(receiver, filter);
-
-        receiver1 = new StopRunReceiver();
-        IntentFilter filter1 = new IntentFilter("action.StopRunning");
-        getActivity().registerReceiver(receiver1, filter1);
 
         receiver2 = new StatusInfoReceiver();
         IntentFilter filter2 = new IntentFilter("action.Status");
@@ -281,7 +276,6 @@ public class HomeFragment extends Fragment {
         getActivity().stopService(spIntent);
         getActivity().stopService(intent);
         getActivity().unregisterReceiver(receiver);
-        getActivity().unregisterReceiver(receiver1);
         getActivity().unregisterReceiver(receiver2);
     }
 
@@ -326,19 +320,6 @@ public class HomeFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             if ("action.HRStatus".equals(intent.getAction())) {
                 HRStatusText.setText(intent.getStringExtra("HRStatus"));
-            }
-        }
-    }
-
-    class StopRunReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if ("action.StopRunning".equals(intent.getAction())) {
-                View view = getView();
-                Snackbar.make(view, "BioData stop recording...", Snackbar.LENGTH_SHORT).show();
-                CircularProgressBar circularProgressBar = view.findViewById(R.id.circularProgressBar);
-                circularProgressBar.setProgressWithAnimation(0f, 1000L); // =1s
-                startStop();
             }
         }
     }
