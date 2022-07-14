@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         scopeList.add(new Scope(HiHealthAtomicScope.HEALTHKIT_SLEEP_READ));*/
 
         // 获取实时心率
-        scopeList.add(new Scope(HiHealthExtendScope.HEALTHKIT_EXTEND_REALTIME_HEART_READ));
+        //scopeList.add(new Scope(HiHealthExtendScope.HEALTHKIT_EXTEND_REALTIME_HEART_READ));
 
         // 控制和获取实时运动权限
         scopeList.add(new Scope(HiHealthExtendScope.HEALTHKIT_EXTEND_SPORT_READ));

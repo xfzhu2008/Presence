@@ -108,8 +108,8 @@ public class SportService extends Service {
     }
 
     private void StartSport() {
-        // 室内跑步
-        int sportType = HiHealthKitConstant.SPORT_TYPE_TREADMILL;
+        // 户外跑步
+        int sportType = HiHealthKitConstant.SPORT_TYPE_RUN;
         HiHealthDataStore.startSport(context, sportType, new ResultCallback() {
             @Override
             public void onResult(int resultCode, Object message) {
