@@ -139,135 +139,177 @@ public class MusicService extends Service implements LifecycleOwner {
                         sendBroadcast(intent);
                         CaCheckFlag = 1;
                         CheckFlag = 1;
+                        Intent intent1 = new Intent("action.CheckFlagStatus");
+                        intent1.putExtra("CheckFlagStatus", String.valueOf(CheckFlag));
+                        sendBroadcast(intent1);
                     } else {
                         if (Cadence < 80) {
                             mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b75);
                             mplayer.start();
-                            FadeIn.volumeGradient(mplayer, 0, 1);
+                            FadeIn.volumeGradient(mplayer, 0, 0.5f);
                             Intent intent = new Intent("action.Status");
                             intent.putExtra("Status","Well done! Keep your pace.");
                             sendBroadcast(intent);
                             CaCheckFlag = 1;
                             CheckFlag = 2;
+                            Intent intent1 = new Intent("action.CheckFlagStatus");
+                            intent1.putExtra("CheckFlagStatus", String.valueOf(CheckFlag));
+                            sendBroadcast(intent1);
                         } else {
                             if (Cadence < 85) {
                                 mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b80);
                                 mplayer.start();
-                                FadeIn.volumeGradient(mplayer, 0, 1);
+                                FadeIn.volumeGradient(mplayer, 0, 0.5f);
                                 Intent intent = new Intent("action.Status");
                                 intent.putExtra("Status","Well done! Keep your pace.");
                                 sendBroadcast(intent);
                                 CaCheckFlag = 1;
                                 CheckFlag = 3;
+                                Intent intent1 = new Intent("action.CheckFlagStatus");
+                                intent1.putExtra("CheckFlagStatus", String.valueOf(CheckFlag));
+                                sendBroadcast(intent1);
                             } else {
                                 if (Cadence < 90) {
                                     mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b85);
                                     mplayer.start();
-                                    FadeIn.volumeGradient(mplayer, 0, 1);
+                                    FadeIn.volumeGradient(mplayer, 0, 0.5f);
                                     Intent intent = new Intent("action.Status");
                                     intent.putExtra("Status","Well done! Keep your pace.");
                                     sendBroadcast(intent);
                                     CaCheckFlag = 1;
                                     CheckFlag = 4;
+                                    Intent intent1 = new Intent("action.CheckFlagStatus");
+                                    intent1.putExtra("CheckFlagStatus", String.valueOf(CheckFlag));
+                                    sendBroadcast(intent1);
                                 }
                                 else {
                                     if (Cadence < 95) {
                                         mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b90);
                                         mplayer.start();
-                                        FadeIn.volumeGradient(mplayer, 0, 1);
+                                        FadeIn.volumeGradient(mplayer, 0, 0.5f);
                                         Intent intent = new Intent("action.Status");
                                         intent.putExtra("Status", "Well done! Keep your pace.");
                                         sendBroadcast(intent);
                                         CaCheckFlag = 1;
                                         CheckFlag = 5;
+                                        Intent intent1 = new Intent("action.CheckFlagStatus");
+                                        intent1.putExtra("CheckFlagStatus", String.valueOf(CheckFlag));
+                                        sendBroadcast(intent1);
                                     }
                                     else {
                                         if (Cadence < 100) {
                                             mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b95);
                                             mplayer.start();
-                                            FadeIn.volumeGradient(mplayer, 0, 1);
+                                            FadeIn.volumeGradient(mplayer, 0, 0.5f);
                                             Intent intent = new Intent("action.Status");
                                             intent.putExtra("Status", "Well done! Keep your pace.");
                                             sendBroadcast(intent);
                                             CaCheckFlag = 1;
                                             CheckFlag = 6;
+                                            Intent intent1 = new Intent("action.CheckFlagStatus");
+                                            intent1.putExtra("CheckFlagStatus", String.valueOf(CheckFlag));
+                                            sendBroadcast(intent1);
                                         }
                                         else {
                                             if (Cadence < 105) {
                                                 mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b100);
                                                 mplayer.start();
-                                                FadeIn.volumeGradient(mplayer, 0, 1);
+                                                FadeIn.volumeGradient(mplayer, 0, 0.5f);
                                                 Intent intent = new Intent("action.Status");
                                                 intent.putExtra("Status", "Well done! Keep your pace.");
                                                 sendBroadcast(intent);
                                                 CaCheckFlag = 1;
                                                 CheckFlag = 7;
+                                                Intent intent1 = new Intent("action.CheckFlagStatus");
+                                                intent1.putExtra("CheckFlagStatus", String.valueOf(CheckFlag));
+                                                sendBroadcast(intent1);
                                             } else {
                                                 if (Cadence < 110) {
                                                     mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b105);
                                                     mplayer.start();
-                                                    FadeIn.volumeGradient(mplayer, 0, 1);
+                                                    FadeIn.volumeGradient(mplayer, 0, 0.5f);
                                                     Intent intent = new Intent("action.Status");
                                                     intent.putExtra("Status", "Well done! Keep your pace.");
                                                     sendBroadcast(intent);
                                                     CaCheckFlag = 1;
                                                     CheckFlag = 8;
+                                                    Intent intent1 = new Intent("action.CheckFlagStatus");
+                                                    intent1.putExtra("CheckFlagStatus", String.valueOf(CheckFlag));
+                                                    sendBroadcast(intent1);
                                                 } else {
                                                     if (Cadence < 115) {
                                                         mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b110);
                                                         mplayer.start();
-                                                        FadeIn.volumeGradient(mplayer, 0, 1);
+                                                        FadeIn.volumeGradient(mplayer, 0, 0.5f);
                                                         Intent intent = new Intent("action.Status");
                                                         intent.putExtra("Status", "Well done! Keep your pace.");
                                                         sendBroadcast(intent);
                                                         CaCheckFlag = 1;
                                                         CheckFlag = 9;
+                                                        Intent intent1 = new Intent("action.CheckFlagStatus");
+                                                        intent1.putExtra("CheckFlagStatus", String.valueOf(CheckFlag));
+                                                        sendBroadcast(intent1);
                                                     } else {
                                                         if (Cadence < 120) {
                                                             mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b115);
                                                             mplayer.start();
-                                                            FadeIn.volumeGradient(mplayer, 0, 1);
+                                                            FadeIn.volumeGradient(mplayer, 0, 0.5f);
                                                             Intent intent = new Intent("action.Status");
                                                             intent.putExtra("Status", "Well done! Keep your pace.");
                                                             sendBroadcast(intent);
                                                             CaCheckFlag = 1;
                                                             CheckFlag = 10;
+                                                            Intent intent1 = new Intent("action.CheckFlagStatus");
+                                                            intent1.putExtra("CheckFlagStatus", String.valueOf(CheckFlag));
+                                                            sendBroadcast(intent1);
                                                         } else {
                                                             if (Cadence < 125) {
                                                                 mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b120);
                                                                 mplayer.start();
-                                                                FadeIn.volumeGradient(mplayer, 0, 1);
+                                                                FadeIn.volumeGradient(mplayer, 0, 0.5f);
                                                                 Intent intent = new Intent("action.Status");
                                                                 intent.putExtra("Status", "Well done! Keep your pace.");
                                                                 sendBroadcast(intent);
                                                                 CaCheckFlag = 1;
                                                                 CheckFlag = 11;
+                                                                Intent intent1 = new Intent("action.CheckFlagStatus");
+                                                                intent1.putExtra("CheckFlagStatus", String.valueOf(CheckFlag));
+                                                                sendBroadcast(intent1);
                                                             } else {
                                                                 if (Cadence < 130) {
                                                                     mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b125);
                                                                     mplayer.start();
-                                                                    FadeIn.volumeGradient(mplayer, 0, 1);
+                                                                    FadeIn.volumeGradient(mplayer, 0, 0.5f);
                                                                     Intent intent = new Intent("action.Status");
                                                                     intent.putExtra("Status", "Well done! Keep your pace.");
                                                                     sendBroadcast(intent);
                                                                     CaCheckFlag = 1;
                                                                     CheckFlag = 12;
+                                                                    Intent intent1 = new Intent("action.CheckFlagStatus");
+                                                                    intent1.putExtra("CheckFlagStatus", String.valueOf(CheckFlag));
+                                                                    sendBroadcast(intent1);
                                                                 } else {
                                                                     if (Cadence < 135) {
                                                                         mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b130);
                                                                         mplayer.start();
-                                                                        FadeIn.volumeGradient(mplayer, 0, 1);
+                                                                        FadeIn.volumeGradient(mplayer, 0, 0.5f);
                                                                         Intent intent = new Intent("action.Status");
                                                                         intent.putExtra("Status", "Well done! Keep your pace.");
                                                                         sendBroadcast(intent);
                                                                         CaCheckFlag = 1;
                                                                         CheckFlag = 13;
+                                                                        Intent intent1 = new Intent("action.CheckFlagStatus");
+                                                                        intent1.putExtra("CheckFlagStatus", String.valueOf(CheckFlag));
+                                                                        sendBroadcast(intent1);
                                                                     } else {
                                                                         Intent intent = new Intent("action.Status");
                                                                         intent.putExtra("Status", "Too fast! Walk slower.");
                                                                         sendBroadcast(intent);
                                                                         CaCheckFlag = 1;
                                                                         CheckFlag = 1;
+                                                                        Intent intent1 = new Intent("action.CheckFlagStatus");
+                                                                        intent1.putExtra("CheckFlagStatus", String.valueOf(CheckFlag));
+                                                                        sendBroadcast(intent1);
                                                                     }
                                                                 }
                                                             }
@@ -316,65 +358,30 @@ public class MusicService extends Service implements LifecycleOwner {
 
             player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
            public void onCompletion(MediaPlayer mp) {
-                i=i+1;
+               i=i+1;
                player.reset();
-               if(Cadence < 75){
-               try {
-                   player.setDataSource(String.valueOf(R.raw.warning));
-                   player.prepare();
+                if(Cadence < 75 || Cadence > 135){
+                   player = MediaPlayer.create(getApplicationContext(), R.raw.warning);
                    player.start();
-               } catch (IOException e) {
-                   e.printStackTrace();
-               } }else
-                   if(Cadence < 85 || Cadence > 135){
-                   try {
-                       player.setDataSource(String.valueOf(R.raw.f4));
-                       player.prepare();
-                       player.start();
-                   } catch (IOException e) {
-                       e.printStackTrace();
-                   } }else
-                   if(Cadence < 95){
-                       try {
-                           player.setDataSource(String.valueOf(R.raw.f6));
-                           player.prepare();
-                           player.start();
-                       } catch (IOException e) {
-                           e.printStackTrace();
-                       } }
-                   else
-                   if(Cadence < 105){
-                       try {
-                           player.setDataSource(String.valueOf(R.raw.f8));
-                           player.prepare();
-                           player.start();
-                       } catch (IOException e) {
-                           e.printStackTrace();
-                       } }else
-                   if(Cadence < 115){
-                       try {
-                           player.setDataSource(String.valueOf(R.raw.f12));
-                           player.prepare();
-                           player.start();
-                       } catch (IOException e) {
-                           e.printStackTrace();
-                       } }else
-                   if(Cadence < 125){
-                       try {
-                           player.setDataSource(String.valueOf(R.raw.f16));
-                           player.prepare();
-                           player.start();
-                       } catch (IOException e) {
-                           e.printStackTrace();
-                       } }else
-                   if(Cadence < 135){
-                       try {
-                           player.setDataSource(String.valueOf(R.raw.f24));
-                           player.prepare();
-                           player.start();
-                       } catch (IOException e) {
-                           e.printStackTrace();
-                       } }
+                    } else if(Cadence < 85){
+                            player = MediaPlayer.create(getApplicationContext(), R.raw.f4);
+                            player.start();
+                            } else if(Cadence < 95){
+                                player = MediaPlayer.create(getApplicationContext(), R.raw.f6);
+                                player.start();
+                                } else if(Cadence < 105){
+                                    player = MediaPlayer.create(getApplicationContext(), R.raw.f8);
+                                    player.start();
+                                    } else if(Cadence < 115){
+                                        player = MediaPlayer.create(getApplicationContext(), R.raw.f12);
+                                        player.start();
+                                        }else if(Cadence < 125){
+                                            player = MediaPlayer.create(getApplicationContext(), R.raw.f16);
+                                            player.start();
+                                            }else {
+                                                player = MediaPlayer.create(getApplicationContext(), R.raw.f24);
+                                                player.start();
+                }
            }
        }); }
     }
@@ -447,6 +454,9 @@ public class MusicService extends Service implements LifecycleOwner {
                       else{
                           NoiseFlag = 1;
                       }
+                    Intent intent = new Intent("action.NoiseFlagStatus");
+                    intent.putExtra("NoiseFlagStatus", String.valueOf(NoiseFlag));
+                    sendBroadcast(intent);
               /*      switch(MusicList){
                         case 1: if(Cadence<100 || Cadence>130){
                             Intent intent = new Intent("action.Status");
@@ -498,34 +508,110 @@ public class MusicService extends Service implements LifecycleOwner {
             {
                 if(CheckFlag==NoiseFlag){}else{
                     CheckFlag=NoiseFlag;
+                    Intent intent = new Intent("action.CheckFlagStatus");
+                    intent.putExtra("CheckFlagStatus", String.valueOf(CheckFlag));
+                    sendBroadcast(intent);
                     if(NoiseFlag==1){
                         mplayer.reset();
                         player.reset();
-                        try {
-                            player.setDataSource(String.valueOf(R.raw.warning));
-                            player.prepare();
-                            player.start();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        player = MediaPlayer.create(getApplicationContext(), R.raw.warning);
+                        player.start();
                     }
-                    if(NoiseFlag==2){
+                    else if(NoiseFlag==2){
                         mplayer.reset();
-                        try {
-                            mplayer.setDataSource(String.valueOf(R.raw.b75));
-                            mplayer.prepare();
-                            mplayer.start();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b75);
+                        mplayer.start();
                         player.reset();
-                        try {
-                            player.setDataSource(String.valueOf(R.raw.f4));
-                            player.prepare();
-                            player.start();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        player = MediaPlayer.create(getApplicationContext(), R.raw.f4);
+                        player.start();
+                    }
+                    else if(NoiseFlag==3){
+                        mplayer.reset();
+                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b80);
+                        mplayer.start();
+                        player.reset();
+                        player = MediaPlayer.create(getApplicationContext(), R.raw.f4);
+                        player.start();
+                    }
+                    else if(NoiseFlag==4){
+                        mplayer.reset();
+                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b85);
+                        mplayer.start();
+                        player.reset();
+                        player = MediaPlayer.create(getApplicationContext(), R.raw.f6);
+                        player.start();
+                    }
+                    else if(NoiseFlag==5){
+                        mplayer.reset();
+                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b90);
+                        mplayer.start();
+                        player.reset();
+                        player = MediaPlayer.create(getApplicationContext(), R.raw.f6);
+                        player.start();
+                    }
+                    else if(NoiseFlag==6){
+                        mplayer.reset();
+                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b95);
+                        mplayer.start();
+                        player.reset();
+                        player = MediaPlayer.create(getApplicationContext(), R.raw.f8);
+                        player.start();
+                    }
+                    else if(NoiseFlag==7){
+                        mplayer.reset();
+                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b100);
+                        mplayer.start();
+                        player.reset();
+                        player = MediaPlayer.create(getApplicationContext(), R.raw.f8);
+                        player.start();
+                    }
+                    else if(NoiseFlag==8){
+                        mplayer.reset();
+                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b105);
+                        mplayer.start();
+                        player.reset();
+                        player = MediaPlayer.create(getApplicationContext(), R.raw.f12);
+                        player.start();
+                    }
+                    else if(NoiseFlag==9){
+                        mplayer.reset();
+                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b110);
+                        mplayer.start();
+                        player.reset();
+                        player = MediaPlayer.create(getApplicationContext(), R.raw.f12);
+                        player.start();
+                    }
+                    else if(NoiseFlag==10){
+                        mplayer.reset();
+                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b115);
+                        mplayer.start();
+                        player.reset();
+                        player = MediaPlayer.create(getApplicationContext(), R.raw.f16);
+                        player.start();
+                    }
+                    else if(NoiseFlag==11){
+                        mplayer.reset();
+                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b120);
+                        mplayer.start();
+                        player.reset();
+                        player = MediaPlayer.create(getApplicationContext(), R.raw.f16);
+                        player.start();
+                    }
+                    else if(NoiseFlag==12){
+                        mplayer.reset();
+                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b125);
+                        mplayer.start();
+                        player.reset();
+                        player = MediaPlayer.create(getApplicationContext(), R.raw.f24);
+                        player.start();
+                    }
+                    else if(NoiseFlag==13){
+                        mplayer.reset();
+                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b130);
+                        mplayer.start();
+                        player.reset();
+                        player = MediaPlayer.create(getApplicationContext(), R.raw.f24);
+                        player.start();
                     }
                 }
         }

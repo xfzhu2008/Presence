@@ -39,7 +39,7 @@ import presence.apk.SportService;
 
 public class HomeFragment extends Fragment {
 
-    private TextView countdownText, HeartRateText, CadenceText, CalorieText, StatusText, HRStatusText, DistanceText;
+    private TextView countdownText, HeartRateText, CadenceText, CheckFlagText, NoiseFlagText, StatusText, DistanceText;
     private Button countdownButton;
 
     private MusicService.MusicController musicController;
@@ -49,8 +49,8 @@ public class HomeFragment extends Fragment {
     private PowerManager.WakeLock wl;
 
     private CountDownTimer countDownTimer;
-    private long timeLeftInMiliseconds = 600000; //10mins
-    private final long StartTimeInMiliseconds = 600000; //10mins
+    private long timeLeftInMiliseconds = 660000; //11mins
+    private final long StartTimeInMiliseconds = 660000; //11mins
     private boolean timerRunning;
 
     private Intent spIntent;
@@ -59,7 +59,8 @@ public class HomeFragment extends Fragment {
 
     private SportReceiver receiver;
     private StatusInfoReceiver receiver2;
-    private HRStatusInfoReceiver receiver3;
+    private CheckFlagReceiver receiver3;
+    private NoiseFlagReceiver receiver4;
 
     @Nullable
     @Override
@@ -69,10 +70,10 @@ public class HomeFragment extends Fragment {
         countdownText = view.findViewById(R.id.countdown_text);
         HeartRateText = view.findViewById(R.id.HeartRate);
         CadenceText = view.findViewById(R.id.Cadence);
-        CalorieText = view.findViewById(R.id.Calorie);
+        CheckFlagText = view.findViewById(R.id.CheckFlag);
+        NoiseFlagText = view.findViewById(R.id.NoiseFlag);
         DistanceText = view.findViewById(R.id.Distance);
         StatusText = view.findViewById(R.id.Status);
-        HRStatusText = view.findViewById(R.id.HRStatus);
         countdownButton = view.findViewById(R.id.countdownbutton);
         CircularProgressBar circularProgressBar = view.findViewById(R.id.circularProgressBar);
 
@@ -84,7 +85,7 @@ public class HomeFragment extends Fragment {
                     circularProgressBar.setProgressWithAnimation(0f, 1000L); // =1s
                 }else{
                     Snackbar.make(view, "BioData recording...", Snackbar.LENGTH_SHORT).show();
-                    circularProgressBar.setProgressWithAnimation(100f, 1200000L); //
+                    circularProgressBar.setProgressWithAnimation(100f, 660000L); //
                 }
                 startStop();
             }
@@ -129,11 +130,15 @@ public class HomeFragment extends Fragment {
         IntentFilter filter2 = new IntentFilter("action.Status");
         getActivity().registerReceiver(receiver2, filter2);
 
-        receiver3 = new HRStatusInfoReceiver();
-        IntentFilter filter3 = new IntentFilter("action.HRStatus");
+        receiver3 = new CheckFlagReceiver();
+        IntentFilter filter3 = new IntentFilter("action.CheckFlagStatus");
         getActivity().registerReceiver(receiver3, filter3);
 
+        receiver4 = new NoiseFlagReceiver();
+        IntentFilter filter4 = new IntentFilter("action.NoiseFlagStatus");
+        getActivity().registerReceiver(receiver4, filter4);
         updateTimer();
+
         return view;
     }
 
@@ -156,7 +161,6 @@ public class HomeFragment extends Fragment {
             AddWakeLock();
             startTimer();
             play();
-            HRStatusText.setText(" ");
         }
     }
 
@@ -277,6 +281,8 @@ public class HomeFragment extends Fragment {
         getActivity().stopService(intent);
         getActivity().unregisterReceiver(receiver);
         getActivity().unregisterReceiver(receiver2);
+        getActivity().unregisterReceiver(receiver3);
+        getActivity().unregisterReceiver(receiver4);
     }
 
     public void SetTextToNull(){
@@ -285,7 +291,8 @@ public class HomeFragment extends Fragment {
             public void run() {
                 HeartRateText.setText("--");
                 CadenceText.setText("--");
-                CalorieText.setText("--");
+                NoiseFlagText.setText("--");
+                CheckFlagText.setText("--");
                 setDataInMusic();
             }
         },5000); // 延时5秒
@@ -297,8 +304,6 @@ public class HomeFragment extends Fragment {
             if ("action.sport".equals(intent.getAction())) {
                 CadenceText.setText(String.valueOf(intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_STEP_RATE, 0)));
                 HeartRateText.setText(String.valueOf(intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_HEARTRATE, 0)));
-                int calorie = intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_CALORIE, 0);
-                CalorieText.setText(calorie / 1000 + " kcal");
                 float distance = intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_DISTANCE, 0);
                 String dis = String.valueOf(distance/1000);
                 DistanceText.setText(dis + " km");
@@ -315,11 +320,20 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    class HRStatusInfoReceiver extends BroadcastReceiver {
+    class CheckFlagReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if ("action.HRStatus".equals(intent.getAction())) {
-                HRStatusText.setText(intent.getStringExtra("HRStatus"));
+            if ("action.CheckFlagStatus".equals(intent.getAction())) {
+                CheckFlagText.setText(intent.getStringExtra("CheckFlagStatus"));
+            }
+        }
+    }
+
+    class NoiseFlagReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if ("action.NoiseFlagStatus".equals(intent.getAction())) {
+                NoiseFlagText.setText(intent.getStringExtra("NoiseFlagStatus"));
             }
         }
     }
