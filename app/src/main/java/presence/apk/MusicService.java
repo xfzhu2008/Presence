@@ -683,7 +683,6 @@ public class MusicService extends Service implements LifecycleOwner {
                                 else {
                                     FadeFlag = 0;
                                     FadeIn.volumeGradient(bPlayer, 1, 0);
-                                    bPlayer.reset();
                                     player.reset();
                                     player = MediaPlayer.create(getApplicationContext(), R.raw.f6);
                                     player.start();
@@ -985,8 +984,7 @@ public class MusicService extends Service implements LifecycleOwner {
             public void run() {
                 noiseFlagViewModel =  NoiseFlagViewModel.getsInstance();
                 final MutableLiveData<Integer> liveData = (MutableLiveData<Integer>)noiseFlagViewModel.getCurrentFlag();
-                if(mplayer != null && mplayer.isPlaying()){
-                liveData.postValue(NoiseFlag);}
+                liveData.postValue(NoiseFlag);
             }
         }, BEGIN_AFTER, INTERVAL);
     }
