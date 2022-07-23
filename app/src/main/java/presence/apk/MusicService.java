@@ -69,7 +69,7 @@ public class MusicService extends Service implements LifecycleOwner {
                 i=0;
                 j=0;
                 if (mplayer != null && mplayer.isPlaying()) {
-                    FadeIn.volumeGradient(mplayer, 0.5f, 0);
+                    FadeIn.volumeGradient(mplayer, 0.3f, 0);
                 }
                 if (player != null && player.isPlaying()) {
                     FadeIn.volumeGradient(player, 1, 0);}
@@ -160,9 +160,9 @@ public class MusicService extends Service implements LifecycleOwner {
                         sendBroadcast(intent1);
                     } else {
                         if (Cadence < 80) {
-                            mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b75);
+                            mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b78);
                             mplayer.start();
-                            FadeIn.volumeGradient(mplayer, 0, 0.5f);
+                            FadeIn.volumeGradient(mplayer, 0, 0.3f);
                             Intent intent = new Intent("action.Status");
                             intent.putExtra("Status","Well done! Keep your pace.");
                             sendBroadcast(intent);
@@ -173,9 +173,9 @@ public class MusicService extends Service implements LifecycleOwner {
                             sendBroadcast(intent1);
                         } else {
                             if (Cadence < 85) {
-                                mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b80);
+                                mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b83);
                                 mplayer.start();
-                                FadeIn.volumeGradient(mplayer, 0, 0.5f);
+                                FadeIn.volumeGradient(mplayer, 0, 0.3f);
                                 Intent intent = new Intent("action.Status");
                                 intent.putExtra("Status","Well done! Keep your pace.");
                                 sendBroadcast(intent);
@@ -186,9 +186,9 @@ public class MusicService extends Service implements LifecycleOwner {
                                 sendBroadcast(intent1);
                             } else {
                                 if (Cadence < 90) {
-                                    mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b85);
+                                    mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b88);
                                     mplayer.start();
-                                    FadeIn.volumeGradient(mplayer, 0, 0.5f);
+                                    FadeIn.volumeGradient(mplayer, 0, 0.3f);
                                     Intent intent = new Intent("action.Status");
                                     intent.putExtra("Status","Well done! Keep your pace.");
                                     sendBroadcast(intent);
@@ -200,9 +200,9 @@ public class MusicService extends Service implements LifecycleOwner {
                                 }
                                 else {
                                     if (Cadence < 95) {
-                                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b90);
+                                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b93);
                                         mplayer.start();
-                                        FadeIn.volumeGradient(mplayer, 0, 0.5f);
+                                        FadeIn.volumeGradient(mplayer, 0, 0.3f);
                                         Intent intent = new Intent("action.Status");
                                         intent.putExtra("Status", "Well done! Keep your pace.");
                                         sendBroadcast(intent);
@@ -214,9 +214,9 @@ public class MusicService extends Service implements LifecycleOwner {
                                     }
                                     else {
                                         if (Cadence < 100) {
-                                            mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b95);
+                                            mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b98);
                                             mplayer.start();
-                                            FadeIn.volumeGradient(mplayer, 0, 0.5f);
+                                            FadeIn.volumeGradient(mplayer, 0, 0.3f);
                                             Intent intent = new Intent("action.Status");
                                             intent.putExtra("Status", "Well done! Keep your pace.");
                                             sendBroadcast(intent);
@@ -228,9 +228,9 @@ public class MusicService extends Service implements LifecycleOwner {
                                         }
                                         else {
                                             if (Cadence < 105) {
-                                                mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b100);
+                                                mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b103);
                                                 mplayer.start();
-                                                FadeIn.volumeGradient(mplayer, 0, 0.5f);
+                                                FadeIn.volumeGradient(mplayer, 0, 0.3f);
                                                 Intent intent = new Intent("action.Status");
                                                 intent.putExtra("Status", "Well done! Keep your pace.");
                                                 sendBroadcast(intent);
@@ -241,9 +241,9 @@ public class MusicService extends Service implements LifecycleOwner {
                                                 sendBroadcast(intent1);
                                             } else {
                                                 if (Cadence < 110) {
-                                                    mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b105);
+                                                    mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b108);
                                                     mplayer.start();
-                                                    FadeIn.volumeGradient(mplayer, 0, 0.5f);
+                                                    FadeIn.volumeGradient(mplayer, 0, 0.3f);
                                                     Intent intent = new Intent("action.Status");
                                                     intent.putExtra("Status", "Well done! Keep your pace.");
                                                     sendBroadcast(intent);
@@ -254,9 +254,9 @@ public class MusicService extends Service implements LifecycleOwner {
                                                     sendBroadcast(intent1);
                                                 } else {
                                                     if (Cadence < 115) {
-                                                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b110);
+                                                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b113);
                                                         mplayer.start();
-                                                        FadeIn.volumeGradient(mplayer, 0, 0.5f);
+                                                        FadeIn.volumeGradient(mplayer, 0, 0.3f);
                                                         Intent intent = new Intent("action.Status");
                                                         intent.putExtra("Status", "Well done! Keep your pace.");
                                                         sendBroadcast(intent);
@@ -267,9 +267,9 @@ public class MusicService extends Service implements LifecycleOwner {
                                                         sendBroadcast(intent1);
                                                     } else {
                                                         if (Cadence < 120) {
-                                                            mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b115);
+                                                            mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b118);
                                                             mplayer.start();
-                                                            FadeIn.volumeGradient(mplayer, 0, 0.5f);
+                                                            FadeIn.volumeGradient(mplayer, 0, 0.3f);
                                                             Intent intent = new Intent("action.Status");
                                                             intent.putExtra("Status", "Well done! Keep your pace.");
                                                             sendBroadcast(intent);
@@ -280,9 +280,9 @@ public class MusicService extends Service implements LifecycleOwner {
                                                             sendBroadcast(intent1);
                                                         } else {
                                                             if (Cadence < 125) {
-                                                                mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b120);
+                                                                mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b123);
                                                                 mplayer.start();
-                                                                FadeIn.volumeGradient(mplayer, 0, 0.5f);
+                                                                FadeIn.volumeGradient(mplayer, 0, 0.3f);
                                                                 Intent intent = new Intent("action.Status");
                                                                 intent.putExtra("Status", "Well done! Keep your pace.");
                                                                 sendBroadcast(intent);
@@ -293,9 +293,9 @@ public class MusicService extends Service implements LifecycleOwner {
                                                                 sendBroadcast(intent1);
                                                             } else {
                                                                 if (Cadence < 130) {
-                                                                    mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b125);
+                                                                    mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b128);
                                                                     mplayer.start();
-                                                                    FadeIn.volumeGradient(mplayer, 0, 0.5f);
+                                                                    FadeIn.volumeGradient(mplayer, 0, 0.3f);
                                                                     Intent intent = new Intent("action.Status");
                                                                     intent.putExtra("Status", "Well done! Keep your pace.");
                                                                     sendBroadcast(intent);
@@ -306,9 +306,9 @@ public class MusicService extends Service implements LifecycleOwner {
                                                                     sendBroadcast(intent1);
                                                                 } else {
                                                                     if (Cadence < 135) {
-                                                                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b130);
+                                                                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b133);
                                                                         mplayer.start();
-                                                                        FadeIn.volumeGradient(mplayer, 0, 0.5f);
+                                                                        FadeIn.volumeGradient(mplayer, 0, 0.3f);
                                                                         Intent intent = new Intent("action.Status");
                                                                         intent.putExtra("Status", "Well done! Keep your pace.");
                                                                         sendBroadcast(intent);
@@ -532,433 +532,434 @@ public class MusicService extends Service implements LifecycleOwner {
                     Intent intent = new Intent("action.CheckFlagStatus");
                     intent.putExtra("CheckFlagStatus", String.valueOf(CheckFlag));
                     sendBroadcast(intent);
-                    if(NoiseFlag==1){
-                        mplayer.reset();
-                        if(FadeFlag == 0){
-                            FadeFlag = 1;
-                            FadeIn.volumeGradient(player, 1, 0);
-                            bPlayer.reset();
-                            bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.warning);
-                            bPlayer.start();
-                            FadeIn.volumeGradient(bPlayer, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    player.reset();
-                                }
-                            },6000); // 延时6秒
-                        }
-                        else if(FadeFlag == 1){
-                            FadeFlag = 0;
-                            FadeIn.volumeGradient(bPlayer, 1, 0);
-                            player.reset();
-                            player = MediaPlayer.create(getApplicationContext(), R.raw.warning);
-                            player.start();
-                            FadeIn.volumeGradient(player, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                    switch(NoiseFlag){
+                        case 1: mplayer.pause();
+                                if(FadeFlag == 0){
+                                    FadeFlag = 1;
+                                    FadeIn.volumeGradient(player, 1, 0);
                                     bPlayer.reset();
+                                    bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.warning);
+                                    bPlayer.start();
+                                    FadeIn.volumeGradient(bPlayer, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            player.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                    }
-                    else if(NoiseFlag==2){
-                        mplayer.reset();
-                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b75);
-                        mplayer.start();
-                        if(FadeFlag == 0){
-                            FadeFlag = 1;
-                            FadeIn.volumeGradient(player, 1, 0);
-                            bPlayer.reset();
-                            bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f4);
-                            bPlayer.start();
-                            FadeIn.volumeGradient(bPlayer, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                else {
+                                    FadeFlag = 0;
+                                    FadeIn.volumeGradient(bPlayer, 1, 0);
                                     player.reset();
+                                    player = MediaPlayer.create(getApplicationContext(), R.raw.warning);
+                                    player.start();
+                                    FadeIn.volumeGradient(player, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            bPlayer.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                        else if(FadeFlag == 1){
-                            FadeFlag = 0;
-                            FadeIn.volumeGradient(bPlayer, 1, 0);
-                            player.reset();
-                            player = MediaPlayer.create(getApplicationContext(), R.raw.f4);
-                            player.start();
-                            FadeIn.volumeGradient(player, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                            break;
+                        case 2: mplayer.reset();
+                                mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b78);
+                                mplayer.setVolume(0.3f, 0.3f);
+                                mplayer.start();
+                                if(FadeFlag == 0){
+                                    FadeFlag = 1;
+                                    FadeIn.volumeGradient(player, 1, 0);
                                     bPlayer.reset();
+                                    bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f4);
+                                    bPlayer.start();
+                                    FadeIn.volumeGradient(bPlayer, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            player.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                    }
-                    else if(NoiseFlag==3){
-                        mplayer.reset();
-                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b80);
-                        mplayer.start();
-                        if(FadeFlag == 0){
-                            FadeFlag = 1;
-                            FadeIn.volumeGradient(player, 1, 0);
-                            bPlayer.reset();
-                            bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f4);
-                            bPlayer.start();
-                            FadeIn.volumeGradient(bPlayer, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                else {
+                                    FadeFlag = 0;
+                                    FadeIn.volumeGradient(bPlayer, 1, 0);
                                     player.reset();
+                                    player = MediaPlayer.create(getApplicationContext(), R.raw.f4);
+                                    player.start();
+                                    FadeIn.volumeGradient(player, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            bPlayer.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                        else if(FadeFlag == 1){
-                            FadeFlag = 0;
-                            FadeIn.volumeGradient(bPlayer, 1, 0);
-                            player.reset();
-                            player = MediaPlayer.create(getApplicationContext(), R.raw.f4);
-                            player.start();
-                            FadeIn.volumeGradient(player, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                            break;
+                        case 3: mplayer.reset();
+                                mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b83);
+                                mplayer.setVolume(0.3f, 0.3f);
+                                mplayer.start();
+                                if(FadeFlag == 0){
+                                    FadeFlag = 1;
+                                    FadeIn.volumeGradient(player, 1, 0);
                                     bPlayer.reset();
+                                    bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f4);
+                                    bPlayer.start();
+                                    FadeIn.volumeGradient(bPlayer, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            player.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                    }
-                    else if(NoiseFlag==4){
-                        mplayer.reset();
-                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b85);
-                        mplayer.start();
-                        if(FadeFlag == 0){
-                            FadeFlag = 1;
-                            FadeIn.volumeGradient(player, 1, 0);
-                            bPlayer.reset();
-                            bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f6);
-                            bPlayer.start();
-                            FadeIn.volumeGradient(bPlayer, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                else {
+                                    FadeFlag = 0;
+                                    FadeIn.volumeGradient(bPlayer, 1, 0);
                                     player.reset();
+                                    player = MediaPlayer.create(getApplicationContext(), R.raw.f4);
+                                    player.start();
+                                    FadeIn.volumeGradient(player, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            bPlayer.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                        else if(FadeFlag == 1){
-                            FadeFlag = 0;
-                            FadeIn.volumeGradient(bPlayer, 1, 0);
-                            player.reset();
-                            player = MediaPlayer.create(getApplicationContext(), R.raw.f6);
-                            player.start();
-                            FadeIn.volumeGradient(player, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                break;
+                        case 4: mplayer.reset();
+                                mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b88);
+                                mplayer.setVolume(0.3f, 0.3f);
+                                mplayer.start();
+                                if(FadeFlag == 0){
+                                    FadeFlag = 1;
+                                    FadeIn.volumeGradient(player, 1, 0);
                                     bPlayer.reset();
+                                    bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f6);
+                                    bPlayer.start();
+                                    FadeIn.volumeGradient(bPlayer, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            player.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                    }
-                    else if(NoiseFlag==5){
-                        mplayer.reset();
-                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b90);
-                        mplayer.start();
-                        if(FadeFlag == 0){
-                            FadeFlag = 1;
-                            FadeIn.volumeGradient(player, 1, 0);
-                            bPlayer.reset();
-                            bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f6);
-                            bPlayer.start();
-                            FadeIn.volumeGradient(bPlayer, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                else {
+                                    FadeFlag = 0;
+                                    FadeIn.volumeGradient(bPlayer, 1, 0);
                                     player.reset();
+                                    player = MediaPlayer.create(getApplicationContext(), R.raw.f6);
+                                    player.start();
+                                    FadeIn.volumeGradient(player, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            bPlayer.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                        else if(FadeFlag == 1){
-                            FadeFlag = 0;
-                            FadeIn.volumeGradient(bPlayer, 1, 0);
-                            bPlayer.reset();
-                            player.reset();
-                            player = MediaPlayer.create(getApplicationContext(), R.raw.f6);
-                            player.start();
-                            FadeIn.volumeGradient(player, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                break;
+                        case 5: mplayer.reset();
+                                mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b93);
+                                mplayer.setVolume(0.3f, 0.3f);
+                                mplayer.start();
+                                if(FadeFlag == 0){
+                                    FadeFlag = 1;
+                                    FadeIn.volumeGradient(player, 1, 0);
                                     bPlayer.reset();
+                                    bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f6);
+                                    bPlayer.start();
+                                    FadeIn.volumeGradient(bPlayer, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            player.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                    }
-                    else if(NoiseFlag==6){
-                        mplayer.reset();
-                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b95);
-                        mplayer.start();
-                        if(FadeFlag == 0){
-                            FadeFlag = 1;
-                            FadeIn.volumeGradient(player, 1, 0);
-                            bPlayer.reset();
-                            bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f8);
-                            bPlayer.start();
-                            FadeIn.volumeGradient(bPlayer, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                else {
+                                    FadeFlag = 0;
+                                    FadeIn.volumeGradient(bPlayer, 1, 0);
+                                    bPlayer.reset();
                                     player.reset();
+                                    player = MediaPlayer.create(getApplicationContext(), R.raw.f6);
+                                    player.start();
+                                    FadeIn.volumeGradient(player, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            bPlayer.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                        else if(FadeFlag == 1){
-                            FadeFlag = 0;
-                            FadeIn.volumeGradient(bPlayer, 1, 0);
-                            player.reset();
-                            player = MediaPlayer.create(getApplicationContext(), R.raw.f8);
-                            player.start();
-                            FadeIn.volumeGradient(player, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                break;
+                        case 6: mplayer.reset();
+                                mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b98);
+                                mplayer.setVolume(0.3f, 0.3f);
+                                mplayer.start();
+                                if(FadeFlag == 0){
+                                    FadeFlag = 1;
+                                    FadeIn.volumeGradient(player, 1, 0);
                                     bPlayer.reset();
+                                    bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f8);
+                                    bPlayer.start();
+                                    FadeIn.volumeGradient(bPlayer, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            player.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                    }
-                    else if(NoiseFlag==7){
-                        mplayer.reset();
-                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b100);
-                        mplayer.start();
-                        if(FadeFlag == 0){
-                            FadeFlag = 1;
-                            FadeIn.volumeGradient(player, 1, 0);
-                            bPlayer.reset();
-                            bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f8);
-                            bPlayer.start();
-                            FadeIn.volumeGradient(bPlayer, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                else {
+                                    FadeFlag = 0;
+                                    FadeIn.volumeGradient(bPlayer, 1, 0);
                                     player.reset();
+                                    player = MediaPlayer.create(getApplicationContext(), R.raw.f8);
+                                    player.start();
+                                    FadeIn.volumeGradient(player, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            bPlayer.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                        else if(FadeFlag == 1){
-                            FadeFlag = 0;
-                            FadeIn.volumeGradient(bPlayer, 1, 0);
-                            player.reset();
-                            player = MediaPlayer.create(getApplicationContext(), R.raw.f8);
-                            player.start();
-                            FadeIn.volumeGradient(player, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                break;
+                        case 7: mplayer.reset();
+                                mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b103);
+                                mplayer.setVolume(0.3f, 0.3f);
+                                mplayer.start();
+                                if(FadeFlag == 0){
+                                    FadeFlag = 1;
+                                    FadeIn.volumeGradient(player, 1, 0);
                                     bPlayer.reset();
+                                    bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f8);
+                                    bPlayer.start();
+                                    FadeIn.volumeGradient(bPlayer, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            player.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                    }
-                    else if(NoiseFlag==8){
-                        mplayer.reset();
-                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b105);
-                        mplayer.start();
-                        if(FadeFlag == 0){
-                            FadeFlag = 1;
-                            FadeIn.volumeGradient(player, 1, 0);
-                            bPlayer.reset();
-                            bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f12);
-                            bPlayer.start();
-                            FadeIn.volumeGradient(bPlayer, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                else {
+                                    FadeFlag = 0;
+                                    FadeIn.volumeGradient(bPlayer, 1, 0);
                                     player.reset();
+                                    player = MediaPlayer.create(getApplicationContext(), R.raw.f8);
+                                    player.start();
+                                    FadeIn.volumeGradient(player, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            bPlayer.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                        else if(FadeFlag == 1){
-                            FadeFlag = 0;
-                            FadeIn.volumeGradient(bPlayer, 1, 0);
-                            player.reset();
-                            player = MediaPlayer.create(getApplicationContext(), R.raw.f12);
-                            player.start();
-                            FadeIn.volumeGradient(player, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                break;
+                        case 8: mplayer.reset();
+                                mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b108);
+                                mplayer.setVolume(0.3f, 0.3f);
+                                mplayer.start();
+                                if(FadeFlag == 0){
+                                    FadeFlag = 1;
+                                    FadeIn.volumeGradient(player, 1, 0);
                                     bPlayer.reset();
+                                    bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f12);
+                                    bPlayer.start();
+                                    FadeIn.volumeGradient(bPlayer, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            player.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                    }
-                    else if(NoiseFlag==9){
-                        mplayer.reset();
-                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b110);
-                        mplayer.start();
-                        if(FadeFlag == 0){
-                            FadeFlag = 1;
-                            FadeIn.volumeGradient(player, 1, 0);
-                            bPlayer.reset();
-                            bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f12);
-                            bPlayer.start();
-                            FadeIn.volumeGradient(bPlayer, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                else {
+                                    FadeFlag = 0;
+                                    FadeIn.volumeGradient(bPlayer, 1, 0);
                                     player.reset();
+                                    player = MediaPlayer.create(getApplicationContext(), R.raw.f12);
+                                    player.start();
+                                    FadeIn.volumeGradient(player, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            bPlayer.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                        else if(FadeFlag == 1){
-                            FadeFlag = 0;
-                            FadeIn.volumeGradient(bPlayer, 1, 0);
-                            player.reset();
-                            player = MediaPlayer.create(getApplicationContext(), R.raw.f12);
-                            player.start();
-                            FadeIn.volumeGradient(player, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                break;
+                        case 9: mplayer.reset();
+                                mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b113);
+                                mplayer.setVolume(0.3f, 0.3f);
+                                mplayer.start();
+                                if(FadeFlag == 0){
+                                    FadeFlag = 1;
+                                    FadeIn.volumeGradient(player, 1, 0);
                                     bPlayer.reset();
+                                    bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f12);
+                                    bPlayer.start();
+                                    FadeIn.volumeGradient(bPlayer, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            player.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                    }
-                    else if(NoiseFlag==10){
-                        mplayer.reset();
-                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b115);
-                        mplayer.start();
-                        if(FadeFlag == 0){
-                            FadeFlag = 1;
-                            FadeIn.volumeGradient(player, 1, 0);
-                            bPlayer.reset();
-                            bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f16);
-                            bPlayer.start();
-                            FadeIn.volumeGradient(bPlayer, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                else {
+                                    FadeFlag = 0;
+                                    FadeIn.volumeGradient(bPlayer, 1, 0);
                                     player.reset();
+                                    player = MediaPlayer.create(getApplicationContext(), R.raw.f12);
+                                    player.start();
+                                    FadeIn.volumeGradient(player, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            bPlayer.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                        else if(FadeFlag == 1){
-                            FadeFlag = 0;
-                            FadeIn.volumeGradient(bPlayer, 1, 0);
-                            player.reset();
-                            player = MediaPlayer.create(getApplicationContext(), R.raw.f16);
-                            player.start();
-                            FadeIn.volumeGradient(player, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                break;
+                        case 10: mplayer.reset();
+                                mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b118);
+                                mplayer.setVolume(0.3f, 0.3f);
+                                mplayer.start();
+                                if(FadeFlag == 0){
+                                    FadeFlag = 1;
+                                    FadeIn.volumeGradient(player, 1, 0);
                                     bPlayer.reset();
+                                    bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f16);
+                                    bPlayer.start();
+                                    FadeIn.volumeGradient(bPlayer, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            player.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                    }
-                    else if(NoiseFlag==11){
-                        mplayer.reset();
-                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b120);
-                        mplayer.start();
-                        if(FadeFlag == 0){
-                            FadeFlag = 1;
-                            FadeIn.volumeGradient(player, 1, 0);
-                            bPlayer.reset();
-                            bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f16);
-                            bPlayer.start();
-                            FadeIn.volumeGradient(bPlayer, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                else {
+                                    FadeFlag = 0;
+                                    FadeIn.volumeGradient(bPlayer, 1, 0);
                                     player.reset();
+                                    player = MediaPlayer.create(getApplicationContext(), R.raw.f16);
+                                    player.start();
+                                    FadeIn.volumeGradient(player, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            bPlayer.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                        else if(FadeFlag == 1){
-                            FadeFlag = 0;
-                            FadeIn.volumeGradient(bPlayer, 1, 0);
-                            player.reset();
-                            player = MediaPlayer.create(getApplicationContext(), R.raw.f16);
-                            player.start();
-                            FadeIn.volumeGradient(player, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                break;
+                        case 11:mplayer.reset();
+                                mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b123);
+                                mplayer.setVolume(0.3f, 0.3f);
+                                mplayer.start();
+                                if(FadeFlag == 0){
+                                    FadeFlag = 1;
+                                    FadeIn.volumeGradient(player, 1, 0);
                                     bPlayer.reset();
+                                    bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f16);
+                                    bPlayer.start();
+                                    FadeIn.volumeGradient(bPlayer, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            player.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                    }
-                    else if(NoiseFlag==12){
-                        mplayer.reset();
-                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b125);
-                        mplayer.start();
-                        if(FadeFlag == 0){
-                            FadeFlag = 1;
-                            FadeIn.volumeGradient(player, 1, 0);
-                            bPlayer.reset();
-                            bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f24);
-                            bPlayer.start();
-                            FadeIn.volumeGradient(bPlayer, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                else {
+                                    FadeFlag = 0;
+                                    FadeIn.volumeGradient(bPlayer, 1, 0);
                                     player.reset();
+                                    player = MediaPlayer.create(getApplicationContext(), R.raw.f16);
+                                    player.start();
+                                    FadeIn.volumeGradient(player, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            bPlayer.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                        else if(FadeFlag == 1){
-                            FadeFlag = 0;
-                            FadeIn.volumeGradient(bPlayer, 1, 0);
-                            player.reset();
-                            player = MediaPlayer.create(getApplicationContext(), R.raw.f24);
-                            player.start();
-                            FadeIn.volumeGradient(player, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                break;
+                        case 12:mplayer.reset();
+                                mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b128);
+                                mplayer.setVolume(0.3f, 0.3f);
+                                mplayer.start();
+                                if(FadeFlag == 0){
+                                    FadeFlag = 1;
+                                    FadeIn.volumeGradient(player, 1, 0);
                                     bPlayer.reset();
+                                    bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f24);
+                                    bPlayer.start();
+                                    FadeIn.volumeGradient(bPlayer, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            player.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                    }
-                    else if(NoiseFlag==13){
-                        mplayer.reset();
-                        mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b130);
-                        mplayer.start();
-                        if(FadeFlag == 0){
-                            FadeFlag = 1;
-                            FadeIn.volumeGradient(player, 1, 0);
-                            bPlayer.reset();
-                            bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f24);
-                            bPlayer.start();
-                            FadeIn.volumeGradient(bPlayer, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                else {
+                                    FadeFlag = 0;
+                                    FadeIn.volumeGradient(bPlayer, 1, 0);
                                     player.reset();
+                                    player = MediaPlayer.create(getApplicationContext(), R.raw.f24);
+                                    player.start();
+                                    FadeIn.volumeGradient(player, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            bPlayer.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
-                        else if(FadeFlag == 1){
-                            FadeFlag = 0;
-                            FadeIn.volumeGradient(bPlayer, 1, 0);
-                            player.reset();
-                            player = MediaPlayer.create(getApplicationContext(), R.raw.f24);
-                            player.start();
-                            FadeIn.volumeGradient(player, 0, 1);
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                                break;
+                        case 13:mplayer.reset();
+                                mplayer = MediaPlayer.create(getApplicationContext(), R.raw.b133);
+                                mplayer.setVolume(0.3f, 0.3f);
+                                mplayer.start();
+                                if(FadeFlag == 0){
+                                    FadeFlag = 1;
+                                    FadeIn.volumeGradient(player, 1, 0);
                                     bPlayer.reset();
+                                    bPlayer = MediaPlayer.create(getApplicationContext(), R.raw.f24);
+                                    bPlayer.start();
+                                    FadeIn.volumeGradient(bPlayer, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            player.reset();
+                                        }
+                                    },6000); // 延时6秒
                                 }
-                            },6000); // 延时6秒
-                        }
+                                else {
+                                    FadeFlag = 0;
+                                    FadeIn.volumeGradient(bPlayer, 1, 0);
+                                    player.reset();
+                                    player = MediaPlayer.create(getApplicationContext(), R.raw.f24);
+                                    player.start();
+                                    FadeIn.volumeGradient(player, 0, 1);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            bPlayer.reset();
+                                        }
+                                    },6000); // 延时6秒
+                                }
+                                break;
                     }
                 }
         }

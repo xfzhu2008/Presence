@@ -195,7 +195,7 @@ public class HomeFragment extends Fragment {
                 circularProgressBar.setProgressWithAnimation(0f, 1000L); // =1s
                 stop();
                 countdownButton.setEnabled(false);
-                StatusText.setText("Congratulation! Mindfulness running succeed");
+                StatusText.setText("Congratulation! Walking creativity succeed");
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
