@@ -33,8 +33,8 @@ import com.huawei.hihealthkit.data.HiHealthKitConstant;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 
-import presence.apk.MusicService;
 import presence.apk.R;
+import presence.apk.RandomMusicService;
 import presence.apk.SportService;
 
 public class NotificationsFragment extends Fragment {
@@ -42,9 +42,13 @@ public class NotificationsFragment extends Fragment {
     private TextView countdownText, HeartRateText, CadenceText, CheckFlagText, NoiseFlagText, StatusText, DistanceText;
     private Button countdownButton;
 
-    private MusicService.MusicController musicController;
-    private Intent intent;
-    private MusicServiceConn conn;
+    private Intent RIntent;
+    private RandomMusicService.RanMusicController RanController;
+    private RandomMusicServiceConn RConn;
+
+    private Intent spIntent;
+    private SportService.SportController spController;
+    private SportServiceConn spConn;
 
     private PowerManager.WakeLock wl;
 
@@ -52,10 +56,6 @@ public class NotificationsFragment extends Fragment {
     private long timeLeftInMiliseconds = 540000; //9mins
     private final long StartTimeInMiliseconds = 540000; //9mins
     private boolean timerRunning;
-
-    private Intent spIntent;
-    private SportService.SportController spController;
-    private SportServiceConn spConn;
 
     private SportReceiver receiver;
     private StatusInfoReceiver receiver2;
@@ -65,7 +65,7 @@ public class NotificationsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_notifications, container, false);
 
         countdownText = view.findViewById(R.id.countdown_text);
         HeartRateText = view.findViewById(R.id.HeartRate);
@@ -112,10 +112,10 @@ public class NotificationsFragment extends Fragment {
         circularProgressBar.setStartAngle(0f);
         circularProgressBar.setProgressDirection(CircularProgressBar.ProgressDirection.TO_RIGHT);
 
-        intent = new Intent(getActivity(), MusicService.class);
-        getActivity().startService(intent);
-        conn = new MusicServiceConn();
-        getActivity().bindService(intent, conn, BIND_AUTO_CREATE);
+        RIntent = new Intent(getActivity(), RandomMusicService.class);
+        getActivity().startService(RIntent);
+        RConn = new RandomMusicServiceConn();
+        getActivity().bindService(RIntent, RConn, BIND_AUTO_CREATE);
 
         spIntent = new Intent(getActivity(), SportService.class);
         getActivity().startService(spIntent);
@@ -216,7 +216,7 @@ public class NotificationsFragment extends Fragment {
         timerRunning = false;
         timeLeftInMiliseconds = StartTimeInMiliseconds;
         countdownButton.setEnabled(true);
-        countdownButton.setText("Start running");
+        countdownButton.setText("Start Mode3");
         updateTimer();
     }
 
@@ -234,28 +234,22 @@ public class NotificationsFragment extends Fragment {
         countdownText.setText(timeLeftText);
     }
 
-    public void play() {
-        musicController.play();
-    }
+    public void play() { RanController.play(); }
 
-    public void stop() {
-        musicController.stop();
-    }
+    public void stop() { RanController.stop(); }
 
-    public void RemoveCallBack(){ musicController.RemoveCallBack(); }
-
-    public void setDataInMusic(){ musicController.setData();}
+    public void RemoveCallBack(){ RanController.RemoveCallBack(); }
 
     public void spRecord() { spController.onStart();}
 
     public void spStop() { spController.onStop();}
 
 
-    class MusicServiceConn implements ServiceConnection {
+    class RandomMusicServiceConn implements ServiceConnection {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            musicController = (MusicService.MusicController) service;
+            RanController = (RandomMusicService.RanMusicController) service;
         }
 
         @Override
@@ -278,7 +272,7 @@ public class NotificationsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         getActivity().stopService(spIntent);
-        getActivity().stopService(intent);
+        getActivity().stopService(RIntent);
         getActivity().unregisterReceiver(receiver);
         getActivity().unregisterReceiver(receiver2);
         getActivity().unregisterReceiver(receiver3);
@@ -293,7 +287,6 @@ public class NotificationsFragment extends Fragment {
                 CadenceText.setText("--");
                 NoiseFlagText.setText("--");
                 CheckFlagText.setText("--");
-                setDataInMusic();
             }
         },5000); // 延时5秒
     }

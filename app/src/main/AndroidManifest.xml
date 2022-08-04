@@ -36,6 +36,10 @@
             android:enabled="true"
             android:exported="true" />
         <service
+            android:name=".RandomMusicService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
             android:name=".MusicService"
             android:enabled="true"
             android:exported="true" />

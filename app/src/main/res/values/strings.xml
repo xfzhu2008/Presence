@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Presence</string>
-    <string name="title_home">Run</string>
-    <string name="title_dashboard">Library</string>
-    <string name="title_notifications">History</string>
+    <string name="title_home">C2H</string>
+    <string name="title_dashboard">H2C</string>
+    <string name="title_notifications">Random</string>
 </resources>
