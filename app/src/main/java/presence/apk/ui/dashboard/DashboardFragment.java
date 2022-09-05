@@ -1,186 +1,345 @@
 package presence.apk.ui.dashboard;
 
 
-import android.Manifest;
+import static android.content.ContentValues.TAG;
+import static android.content.Context.BIND_AUTO_CREATE;
+import static android.content.Context.POWER_SERVICE;
+
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
+import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
+import android.os.IBinder;
+import android.os.PowerManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.PermissionListener;
-import java.lang.Object;
+import com.google.android.material.snackbar.Snackbar;
+import com.huawei.hihealthkit.data.HiHealthKitConstant;
+import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
+import presence.apk.ConstantMusicService;
 import presence.apk.R;
+import presence.apk.SportService;
 
 public class DashboardFragment extends Fragment {
 
-    ListView listView;
-    private List<File> mySongs = new ArrayList<>();
-    private SongAdapter adapter;
-    private Handler handler = new Handler(Looper.myLooper()) {
+    private TextView countdownText, HeartRateText, CadenceText, CheckFlagText, NoiseFlagText, StatusText, DistanceText;
+    private Button countdownButton;
 
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            adapter.setSongs(mySongs);
-        }
-    };
+    private ConstantMusicService.MusicController ConstantMusicController;
+    private Intent CIntent;
+    private ConstantMusicServiceConn CConn;
 
+    private PowerManager.WakeLock wl;
+
+    private CountDownTimer countDownTimer;
+    private long timeLeftInMiliseconds = 540000; //9mins
+    private final long StartTimeInMiliseconds = 540000; //9mins
+    private boolean timerRunning;
+
+    private Intent spIntent;
+    private SportService.SportController spController;
+    private SportServiceConn spConn;
+
+    private SportReceiver receiver;
+    private StatusInfoReceiver receiver2;
+    private CheckFlagReceiver receiver3;
+    private NoiseFlagReceiver receiver4;
+
+    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        listView = view.findViewById(R.id.listViewSong);
-        runtimePermission();
+
+        countdownText = view.findViewById(R.id.countdown_text);
+        HeartRateText = view.findViewById(R.id.HeartRate);
+        CadenceText = view.findViewById(R.id.Cadence);
+        CheckFlagText = view.findViewById(R.id.CheckFlag);
+        NoiseFlagText = view.findViewById(R.id.NoiseFlag);
+        DistanceText = view.findViewById(R.id.Distance);
+        StatusText = view.findViewById(R.id.Status);
+        countdownButton = view.findViewById(R.id.countdownbutton);
+        CircularProgressBar circularProgressBar = view.findViewById(R.id.circularProgressBar);
+
+        countdownButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(timerRunning){
+                    Snackbar.make(view, "BioData stop recording...", Snackbar.LENGTH_SHORT).show();
+                    circularProgressBar.setProgressWithAnimation(0f, 1000L); // =1s
+                }else{
+                    Snackbar.make(view, "BioData recording...", Snackbar.LENGTH_SHORT).show();
+                    circularProgressBar.setProgressWithAnimation(100f, 540000L); //
+                }
+                startStop();
+            }
+        });
+
+
+// Set Progress Max
+        circularProgressBar.setProgressMax(100f);
+
+// Set ProgressBar Color with gradient
+        circularProgressBar.setProgressBarColorStart(Color.BLUE);
+        circularProgressBar.setProgressBarColorEnd(Color.RED);
+        circularProgressBar.setProgressBarColorDirection(CircularProgressBar.GradientDirection.TOP_TO_BOTTOM);
+
+// Set background ProgressBar Color
+        circularProgressBar.setBackgroundProgressBarColor(Color.GRAY);
+
+// Set Width
+        circularProgressBar.setProgressBarWidth(4f); // in DP
+        circularProgressBar.setBackgroundProgressBarWidth(4f); // in DP
+
+// Other
+        circularProgressBar.setRoundBorder(true);
+        circularProgressBar.setStartAngle(0f);
+        circularProgressBar.setProgressDirection(CircularProgressBar.ProgressDirection.TO_RIGHT);
+
+        CIntent = new Intent(getActivity(), ConstantMusicService.class);
+        getActivity().startService(CIntent);
+        CConn = new ConstantMusicServiceConn();
+        getActivity().bindService(CIntent, CConn, BIND_AUTO_CREATE);
+
+        spIntent = new Intent(getActivity(), SportService.class);
+        getActivity().startService(spIntent);
+        spConn = new SportServiceConn();
+        getActivity().bindService(spIntent, spConn, BIND_AUTO_CREATE);
+
+        receiver = new SportReceiver();
+        IntentFilter filter = new IntentFilter("action.sport");
+        getActivity().registerReceiver(receiver, filter);
+
+        receiver2 = new StatusInfoReceiver();
+        IntentFilter filter2 = new IntentFilter("action.Status");
+        getActivity().registerReceiver(receiver2, filter2);
+
+        receiver3 = new CheckFlagReceiver();
+        IntentFilter filter3 = new IntentFilter("action.CheckFlagStatus");
+        getActivity().registerReceiver(receiver3, filter3);
+
+        receiver4 = new NoiseFlagReceiver();
+        IntentFilter filter4 = new IntentFilter("action.NoiseFlagStatus");
+        getActivity().registerReceiver(receiver4, filter4);
+        updateTimer();
 
         return view;
     }
 
-    public void runtimePermission() {
-        Dexter.withContext(getActivity()).withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                .withListener(new PermissionListener() {
-                    @Override
-                    public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
-                        displaySongs();
-                    }
-
-                    @Override
-                    public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
-
-                    }
-
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
-                        permissionToken.continuePermissionRequest();
-                    }
-                }).check();
+    public void startStop() {
+        if (timerRunning) {
+            RemoveCallBack();
+            stop();
+            countdownButton.setEnabled(false);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    spStop();
+                    ReleaseWakeLock();
+                    resetTimer();
+                    SetTextToNull();
+                }
+            },6000); // 延时6秒
+        } else {
+            spRecord();
+            AddWakeLock();
+            startTimer();
+            play();
+        }
     }
 
-    public void findSong(File file) {
+    public void AddWakeLock() {
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        PowerManager pm = (PowerManager) getActivity().getSystemService(POWER_SERVICE);
+        wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "presence::wlTag");
+        wl.acquire();
+        Log.i(TAG, " wakelock wl.acquire(); ");
+    }
 
-        File[] files = file.listFiles();
+    public void ReleaseWakeLock() {
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        wl.release();
+        wl = null;
+        Log.i(TAG, " wakelock wl.release(); ");
+    }
 
-        if (files != null) {//要判空，否则会闪退
-            for (File singlefile : files) {
-
-                if (isDetached() || isRemoving()) {
-                    return;
-                }
-
-                if (singlefile.isDirectory() && !singlefile.isHidden()) {
-                    findSong(singlefile);
-                } else {
-                    if (singlefile.getName().endsWith(".flac") || singlefile.getName().endsWith(".mp3")) {
-                        mySongs.add(singlefile);
-                        /**
-                         * 因为是在线程中遍历文件，所以操作UI界面必须使用handler方式
-                         */
-                        handler.sendEmptyMessage(0);
-                    }
-                }
+    public void startTimer() {
+        countDownTimer = new CountDownTimer(timeLeftInMiliseconds, 1000) {
+            @Override
+            public void onTick(long l) {
+                timeLeftInMiliseconds = l;
+                updateTimer();
             }
+
+            @Override
+            public void onFinish() {
+                View view = getView();
+                Snackbar.make(view, "BioData stop recording...", Snackbar.LENGTH_SHORT).show();
+                CircularProgressBar circularProgressBar = view.findViewById(R.id.circularProgressBar);
+                circularProgressBar.setProgressWithAnimation(0f, 1000L); // =1s
+                stop();
+                countdownButton.setEnabled(false);
+                StatusText.setText("Congratulation! Walking creativity succeed");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        spStop();
+                        ReleaseWakeLock();
+                        resetTimer();
+                        SetTextToNull();
+                    }
+                },6000); // 延时6秒
+            }
+        }.start();
+        countdownButton.setText("Reset");
+        timerRunning = true;
+    }
+
+    public void resetTimer() {
+        countDownTimer.cancel();
+        timerRunning = false;
+        timeLeftInMiliseconds = StartTimeInMiliseconds;
+        countdownButton.setEnabled(true);
+        countdownButton.setText("Start running");
+        updateTimer();
+    }
+
+    public void updateTimer() {
+        int minutes = (int) timeLeftInMiliseconds / 60000;
+        int seconds = (int) timeLeftInMiliseconds % 60000 / 1000;
+
+        String timeLeftText;
+
+        timeLeftText = "" + minutes;
+        timeLeftText += ":";
+        if (seconds < 10) timeLeftText += "0";
+        timeLeftText += seconds;
+
+        countdownText.setText(timeLeftText);
+    }
+
+    public void play() {
+        ConstantMusicController.play();
+    }
+
+    public void stop() {
+        ConstantMusicController.stop();
+    }
+
+    public void RemoveCallBack(){ ConstantMusicController.RemoveCallBack(); }
+
+    public void setDataInMusic(){ ConstantMusicController.setData();}
+
+    public void spRecord() { spController.onStart();}
+
+    public void spStop() { spController.onStop();}
+
+
+    class ConstantMusicServiceConn implements ServiceConnection {
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ConstantMusicController = (ConstantMusicService.MusicController) service;
         }
 
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+        }
     }
 
-    public void displaySongs() {
+    class SportServiceConn implements ServiceConnection{
 
-        adapter = new SongAdapter();
-        listView.setAdapter(adapter);
-        /**
-         * 开启线程来遍历sdcard，否则文件太多会导致卡顿
-         */
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                mySongs.clear();
-                findSong(Environment.getExternalStorageDirectory());
-            }
-        }).start();
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service){
+            spController = (SportService.SportController)service;
+        }
+        @Override
+        public  void onServiceDisconnected(ComponentName name){
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        getActivity().stopService(spIntent);
+        getActivity().stopService(CIntent);
+        getActivity().unregisterReceiver(receiver);
+        getActivity().unregisterReceiver(receiver2);
+        getActivity().unregisterReceiver(receiver3);
+        getActivity().unregisterReceiver(receiver4);
     }
 
-    class SongAdapter extends BaseAdapter {
-
-        private List<File> songs = new ArrayList<>();
-
-        @Override
-        public int getCount() {
-            return songs == null ? 0 : songs.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return songs.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        public List<File> getSongs() {
-            return songs;
-        }
-
-        public void setSongs(List<File> songs) {
-            this.songs.clear();
-            this.songs.addAll(songs);
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            ViewHolder holder;
-            if (convertView == null) {
-                convertView = View.inflate(parent.getContext(), R.layout.item_lv_song, null);
-                holder = new ViewHolder(convertView);
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
+    public void SetTextToNull(){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                HeartRateText.setText("--");
+                CadenceText.setText("--");
+                NoiseFlagText.setText("--");
+                CheckFlagText.setText("--");
+                setDataInMusic();
             }
+        },5000); // 延时5秒
+    }
 
-            String fileName = songs.get(position).getName().replace(".flac", "").replace(".mp3", "");
-            holder.tv_name.setText(fileName);
-
-
-            return convertView;
-        }
-
-        class ViewHolder {
-            public View rootView;
-            public TextView tv_name;
-
-            public ViewHolder(View rootView) {
-                this.rootView = rootView;
-                this.tv_name = (TextView) rootView.findViewById(R.id.tv_name);
+    class SportReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if ("action.sport".equals(intent.getAction())) {
+                CadenceText.setText(String.valueOf(intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_STEP_RATE, 0)));
+                HeartRateText.setText(String.valueOf(intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_HEARTRATE, 0)));
+                float distance = intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_DISTANCE, 0);
+                String dis = String.valueOf(distance/1000);
+                DistanceText.setText(dis + " km");
             }
-
         }
     }
 
+    class StatusInfoReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if ("action.Status".equals(intent.getAction())) {
+                StatusText.setText(intent.getStringExtra("Status"));
+            }
+        }
+    }
+
+    class CheckFlagReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if ("action.CheckFlagStatus".equals(intent.getAction())) {
+                CheckFlagText.setText(intent.getStringExtra("CheckFlagStatus"));
+            }
+        }
+    }
+
+    class NoiseFlagReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if ("action.NoiseFlagStatus".equals(intent.getAction())) {
+                NoiseFlagText.setText(intent.getStringExtra("NoiseFlagStatus"));
+            }
+        }
+    }
 }
+
+
+
+
+

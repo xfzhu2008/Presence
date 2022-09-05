@@ -40,6 +40,10 @@
             android:enabled="true"
             android:exported="true" />
         <service
+            android:name=".ConstantMusicService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
             android:name=".MusicService"
             android:enabled="true"
             android:exported="true" />

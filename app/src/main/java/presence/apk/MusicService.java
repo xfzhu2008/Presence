@@ -38,6 +38,7 @@ public class MusicService extends Service implements LifecycleOwner {
     private MusicReceiver receiver;
     private final Timer timer = new Timer();
     private final Handler mHandler = new Handler();
+    private final Handler nHandler = new Handler();
     MusicServiceCaViewModel musicServiceCaViewModel = new MusicServiceCaViewModel();
     NoiseFlagViewModel noiseFlagViewModel = new NoiseFlagViewModel();
     private LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
@@ -361,6 +362,9 @@ public class MusicService extends Service implements LifecycleOwner {
         if(mHandler != null){
             mHandler.removeCallbacksAndMessages(null);
         }
+        if(nHandler != null){
+            nHandler.removeCallbacksAndMessages(null);
+        }
     }
 
     public void play(){
@@ -369,7 +373,7 @@ public class MusicService extends Service implements LifecycleOwner {
             bPlayer = MediaPlayer.create(this, R.raw.f2);
             bPlayer.start();
             FadeIn.volumeGradient(bPlayer, 0, 1);
-            new Handler().postDelayed(new Runnable() {
+            Runnable nRun = new Runnable() {
                 @Override
                 public void run() {
                     FadeIn.volumeGradient(bPlayer, 1, 0);
@@ -403,7 +407,8 @@ public class MusicService extends Service implements LifecycleOwner {
                         FadeIn.volumeGradient(player, 0, 1);
                     }
                 }
-            }, 54000); // 延时6秒
+            };
+            nHandler.postDelayed(nRun, 60000);
         }
     }
 
