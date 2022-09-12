@@ -33,7 +33,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class ConstantMusicService extends Service implements LifecycleOwner {
-    private static int HeartRate = 0, Cadence = 0, NoiseFlag = 0, CheckFlag = 0, CaCheckFlag = 0, i = 0, j = 0;
+    private static int HeartRate = 0, Cadence = 0, NoiseFlag = 0, CheckFlag = 0, CaCheckFlag = 0, i = 0, j = 0, k = 0;
     private final static int BEGIN_AFTER = 1000, INTERVAL = 10000;
     private MediaPlayer player;
     private MediaPlayer mplayer;
@@ -72,6 +72,7 @@ public class ConstantMusicService extends Service implements LifecycleOwner {
             NoiseFlag = 0;
             i=0;
             j=0;
+            k=0;
             if (mplayer != null && mplayer.isPlaying()) {
                 FadeIn.volumeGradient(mplayer, 0.3f, 0);
             }
@@ -501,17 +502,49 @@ public class ConstantMusicService extends Service implements LifecycleOwner {
         }
         player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             public void onCompletion(MediaPlayer mp) {
-                i = i + 1;
-                if (i < 2) {
-                    NoiseSelect();
-                }else{
-                    player.stop();
-                    player.release();
-                    player = null;
-                    CaCheckFlag = 0;
-                }
+                NoiseRepeat();
             }
         });
+    }
+
+    public void NoiseRepeat(){
+        switch(CheckFlag){
+            case 1:
+            case 14:
+                    player = MediaPlayer.create(getApplicationContext(), R.raw.warning);
+                    player.start();
+                    break;
+            case 2:
+            case 3:
+                    player = MediaPlayer.create(getApplicationContext(), R.raw.f4);
+                    player.start();
+                    break;
+            case 4:
+            case 5:
+                    player = MediaPlayer.create(getApplicationContext(), R.raw.f6);
+                    player.start();
+                    break;
+            case 6:
+            case 7:
+                    player = MediaPlayer.create(getApplicationContext(), R.raw.f8);
+                    player.start();
+                    break;
+            case 8:
+            case 9:
+                    player = MediaPlayer.create(getApplicationContext(), R.raw.f12);
+                    player.start();
+                    break;
+            case 10:
+            case 11:
+                    player = MediaPlayer.create(getApplicationContext(), R.raw.f16);
+                    player.start();
+                    break;
+            case 12:
+            case 13:
+                    player = MediaPlayer.create(getApplicationContext(), R.raw.f24);
+                    player.start();
+                    break;
+        }
     }
 
     private void CaIniComponent()
@@ -570,12 +603,30 @@ public class ConstantMusicService extends Service implements LifecycleOwner {
             public void onChanged(@Nullable Integer Flag)
             {
                 if(CaCheckFlag==1){
-                    if(CheckFlag>NoiseFlag){
-                        soundpool.play(hurryup,1,1,0,0,1);
+                    if(NoiseFlag<CheckFlag){
+                        if(k==0) {
+                            soundpool.play(hurryup, 1, 1, 0, 0, 1);
+                            k=k+1;
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    k=0;
+                                }
+                            }, 5000); // 延时5秒
+                        }
                     }
-                        else if(CheckFlag==NoiseFlag){}
-                            else {
-                             soundpool.play(slowdown,1,1,0,0,1);
+                        else if(CheckFlag==NoiseFlag || NoiseFlag==CheckFlag+1){}
+                            else if (NoiseFlag > (CheckFlag+1)){
+                                if(k==0) {
+                                    soundpool.play(slowdown, 1, 1, 0, 0, 1);
+                                    k=k+1;
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            k=0;
+                                        }
+                                    }, 5000); // 延时5秒
+                                }
                             }
                 }
             }
