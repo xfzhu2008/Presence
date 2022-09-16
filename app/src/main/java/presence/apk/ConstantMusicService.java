@@ -362,7 +362,7 @@ public class ConstantMusicService extends Service implements LifecycleOwner {
         mplayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             public void onCompletion(MediaPlayer mp) {
                 j = j + 1;
-                if (j < 9) {
+                if (j < 5) {
                     BeatsRepeat();
                 }else{
                     mplayer.stop();
@@ -500,14 +500,14 @@ public class ConstantMusicService extends Service implements LifecycleOwner {
             player.start();
             FadeIn.volumeGradient(player, 0, 1);
         }
-        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+     /*   player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             public void onCompletion(MediaPlayer mp) {
                 NoiseRepeat();
             }
-        });
+        });*/
     }
 
-    public void NoiseRepeat(){
+  /*  public void NoiseRepeat(){
         switch(CheckFlag){
             case 1:
             case 14:
@@ -545,7 +545,7 @@ public class ConstantMusicService extends Service implements LifecycleOwner {
                     player.start();
                     break;
         }
-    }
+    }*/
 
     private void CaIniComponent()
     {

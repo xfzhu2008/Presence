@@ -49,8 +49,8 @@ public class DashboardFragment extends Fragment {
     private PowerManager.WakeLock wl;
 
     private CountDownTimer countDownTimer;
-    private long timeLeftInMiliseconds = 540000; //9mins
-    private final long StartTimeInMiliseconds = 540000; //9mins
+    private long timeLeftInMiliseconds = 300000; //9mins
+    private final long StartTimeInMiliseconds = 300000; //9mins
     private boolean timerRunning;
 
     private Intent spIntent;
@@ -85,7 +85,7 @@ public class DashboardFragment extends Fragment {
                     circularProgressBar.setProgressWithAnimation(0f, 1000L); // =1s
                 }else{
                     Snackbar.make(view, "BioData recording...", Snackbar.LENGTH_SHORT).show();
-                    circularProgressBar.setProgressWithAnimation(100f, 540000L); //
+                    circularProgressBar.setProgressWithAnimation(100f, 300000L); //
                 }
                 startStop();
             }

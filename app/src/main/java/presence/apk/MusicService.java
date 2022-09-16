@@ -347,7 +347,7 @@ public class MusicService extends Service implements LifecycleOwner {
                             mplayer.release();
                             mplayer = null;
                             CaCheckFlag = 0;
-                            if (j < 9) {
+                            if (j < 5) {
                                 BeatsPlay();
                             }
                         }

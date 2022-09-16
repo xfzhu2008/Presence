@@ -94,6 +94,7 @@ public class RandomMusicService extends Service implements LifecycleOwner {
         BeatsList.add(R.raw.b133);
         Collections.shuffle(BeatsList);
         MusicName = valueOf(BeatsList.get(j));
+        Log.i(TAG, "MusicName:" + MusicName);
         RangeDisplay();
         player = new MediaPlayer();
         mplayer = new MediaPlayer();
@@ -160,7 +161,7 @@ public class RandomMusicService extends Service implements LifecycleOwner {
                             mplayer.stop();
                             mplayer.release();
                             mplayer = null;
-                            if (j < 9) {
+                            if (j < 5) {
                                 BeatsPlay();
                             }
                         }
@@ -184,7 +185,7 @@ public class RandomMusicService extends Service implements LifecycleOwner {
                     mplayer.stop();
                     mplayer.release();
                     mplayer = null;
-                    if (j < 9) {
+                    if (j < 5) {
                         BeatsPlay();
                     }
                 }
@@ -232,7 +233,7 @@ public class RandomMusicService extends Service implements LifecycleOwner {
     }
 
     public void NoiseChoice(){
-        if (MusicName == 2131755035 || MusicName == 2131755036) {
+        if (MusicName == 2131755015 || MusicName == 2131755016) {
             if (FadeFlag == 0) {
                 FadeFlag = 1;
                 Intent intent = new Intent("action.NoiseFlagStatus");
@@ -265,7 +266,7 @@ public class RandomMusicService extends Service implements LifecycleOwner {
                 }, 6000); // 延时6秒
             }
             i = i + 1;
-        } else if (MusicName == 2131755037 || MusicName == 2131755038) {
+        } else if (MusicName == 2131755017 || MusicName == 2131755018) {
             if (FadeFlag == 0) {
                 FadeFlag = 1;
                 Intent intent = new Intent("action.NoiseFlagStatus");
@@ -298,7 +299,7 @@ public class RandomMusicService extends Service implements LifecycleOwner {
                 }, 6000); // 延时6秒
             }
             i = i + 1;
-        } else if (MusicName == 2131755039 || MusicName == 2131755028) {
+        } else if (MusicName == 2131755019 || MusicName == 2131755008) {
             if (FadeFlag == 0) {
                 FadeFlag = 1;
                 Intent intent = new Intent("action.NoiseFlagStatus");
@@ -331,7 +332,7 @@ public class RandomMusicService extends Service implements LifecycleOwner {
                 }, 6000); // 延时6秒
             }
             i = i + 1;
-        } else if (MusicName == 2131755029 || MusicName == 2131755030) {
+        } else if (MusicName == 2131755009 || MusicName == 2131755010) {
             if (FadeFlag == 0) {
                 FadeFlag = 1;
                 Intent intent = new Intent("action.NoiseFlagStatus");
@@ -364,7 +365,7 @@ public class RandomMusicService extends Service implements LifecycleOwner {
                 }, 6000); // 延时6秒
             }
             i = i + 1;
-        } else if (MusicName == 2131755031 || MusicName == 2131755032) {
+        } else if (MusicName == 2131755011 || MusicName == 2131755012) {
             if (FadeFlag == 0) {
                 FadeFlag = 1;
                 Intent intent = new Intent("action.NoiseFlagStatus");
@@ -397,7 +398,7 @@ public class RandomMusicService extends Service implements LifecycleOwner {
                 }, 6000); // 延时6秒
             }
             i = i + 1;
-        } else if (MusicName == 2131755033 || MusicName == 2131755034) {
+        } else if (MusicName == 2131755013 || MusicName == 2131755014) {
             if (FadeFlag == 0) {
                 FadeFlag = 1;
                 Intent intent = new Intent("action.NoiseFlagStatus");
@@ -431,25 +432,25 @@ public class RandomMusicService extends Service implements LifecycleOwner {
             }
             i = i + 1;
         }
-        if (i < 9) {
+        if (i < 5) {
             Repeat();
         }
     }
 
     public void RangeDisplay(){
         switch(MusicName){
-            case 2131755035: Range = "75-80";break;
-            case 2131755036: Range = "80-85";break;
-            case 2131755037: Range = "85-90";break;
-            case 2131755038: Range = "90-95";break;
-            case 2131755039: Range = "95-100";break;
-            case 2131755028: Range = "100-105";break;
-            case 2131755029: Range = "105-110";break;
-            case 2131755030: Range = "110-115";break;
-            case 2131755031: Range = "115-120";break;
-            case 2131755032: Range = "120-125";break;
-            case 2131755033: Range = "125-130";break;
-            case 2131755034: Range = "130-135";break;
+            case 2131755015: Range = "75-80";break;
+            case 2131755016: Range = "80-85";break;
+            case 2131755017: Range = "85-90";break;
+            case 2131755018: Range = "90-95";break;
+            case 2131755019: Range = "95-100";break;
+            case 2131755008: Range = "100-105";break;
+            case 2131755009: Range = "105-110";break;
+            case 2131755010: Range = "110-115";break;
+            case 2131755011: Range = "115-120";break;
+            case 2131755012: Range = "120-125";break;
+            case 2131755013: Range = "125-130";break;
+            case 2131755014: Range = "130-135";break;
             default: Range = "--";
         }
     }
