@@ -7,10 +7,13 @@ import static android.content.Context.POWER_SERVICE;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -33,14 +36,27 @@ import com.huawei.hihealthkit.data.HiHealthKitConstant;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import presence.apk.MyDataBaseHelper;
 import presence.apk.R;
 import presence.apk.RandomMusicService;
 import presence.apk.SportService;
+import presence.apk.ui.home.HomeFragment;
 
 public class NotificationsFragment extends Fragment {
 
     private TextView countdownText, HeartRateText, CadenceText, CheckFlagText, NoiseFlagText, StatusText, DistanceText;
     private Button countdownButton;
+    private Button ClearDatabase;
+    private Button ExportXlsx;
 
     private Intent RIntent;
     private RandomMusicService.RanMusicController RanController;
@@ -51,7 +67,7 @@ public class NotificationsFragment extends Fragment {
     private SportServiceConn spConn;
 
     private PowerManager.WakeLock wl;
-
+    private MyDataBaseHelper dbHelper;
     private CountDownTimer countDownTimer;
     private long timeLeftInMiliseconds = 300000; //9mins
     private final long StartTimeInMiliseconds = 300000; //9mins
@@ -76,6 +92,10 @@ public class NotificationsFragment extends Fragment {
         StatusText = view.findViewById(R.id.Status);
         countdownButton = view.findViewById(R.id.countdownbutton);
         CircularProgressBar circularProgressBar = view.findViewById(R.id.circularProgressBar);
+        ClearDatabase = view.findViewById(R.id.ClearDB);
+        ExportXlsx = view.findViewById(R.id.ExportData);
+
+        dbHelper = new MyDataBaseHelper(getActivity(), "BioStore.db",null,2);
 
         countdownButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +108,21 @@ public class NotificationsFragment extends Fragment {
                     circularProgressBar.setProgressWithAnimation(100f, 300000L); //
                 }
                 startStop();
+            }
+        });
+        ClearDatabase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                db.execSQL(" DELETE FROM " + MyDataBaseHelper.TABLE_NAME);
+                Snackbar.make(view, "DataBase Cleared.", Snackbar.LENGTH_SHORT).show();
+                dbHelper.close();
+            }
+        });
+        ExportXlsx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ExportExcel();
             }
         });
 
@@ -150,6 +185,7 @@ public class NotificationsFragment extends Fragment {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    dbHelper.close();
                     spStop();
                     ReleaseWakeLock();
                     resetTimer();
@@ -157,6 +193,7 @@ public class NotificationsFragment extends Fragment {
                 }
             },6000); // 延时6秒
         } else {
+            dbHelper.getWritableDatabase();
             spRecord();
             AddWakeLock();
             startTimer();
@@ -244,6 +281,74 @@ public class NotificationsFragment extends Fragment {
 
     public void spStop() { spController.onStop();}
 
+    public void ExportExcel(){
+        List<Student> students = query(dbHelper.getReadableDatabase());
+        XSSFWorkbook mWorkbook = new XSSFWorkbook();
+        XSSFSheet mSheet = mWorkbook.createSheet();
+        createExcelHead(mSheet);
+        if(students != null){
+            for(Student student: students){
+                createCell(student.TimeLeft,student.HeartRate,student.Cadence,mSheet);
+            }
+        }
+        File xlsxFile = new File("/storage/emulated/0/Download/", "excel.xlsx");
+        try{
+            if (!xlsxFile.exists()) {
+                xlsxFile.createNewFile();
+            }
+            FileOutputStream fileOut = new FileOutputStream(xlsxFile);
+            mWorkbook.write(fileOut);// 或者以流的形式写入文件
+            fileOut.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private List<Student> query(SQLiteDatabase db) {
+        List<Student> students = null;
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + MyDataBaseHelper.TABLE_NAME, null);
+        if (cursor != null && cursor.getCount() > 0) {
+
+            students = new ArrayList<>();
+
+            while (cursor.moveToNext()) {
+                Student student = new Student();
+                student.TimeLeft = cursor.getInt(cursor.getColumnIndexOrThrow(MyDataBaseHelper.TIME_LEFT));
+                student.HeartRate = cursor.getInt(cursor.getColumnIndexOrThrow(MyDataBaseHelper.HEART_RATE));
+                student.Cadence = cursor.getInt(cursor.getColumnIndexOrThrow(MyDataBaseHelper.CADENCE));
+
+                students.add(student);
+            }
+            cursor.close();
+        }
+        db.close();
+        return students;
+    }
+
+    //数据容器，装载从数据库中读出的数据内容。
+    private class Student {
+        public int HeartRate;
+        public int Cadence;
+        public int TimeLeft;
+    }
+
+    // 创建Excel标题行，第一行。
+    private void createExcelHead(XSSFSheet mSheet) {
+        XSSFRow headRow = mSheet.createRow(0);
+        headRow.createCell(0).setCellValue(MyDataBaseHelper.TIME_LEFT);
+        headRow.createCell(1).setCellValue(MyDataBaseHelper.HEART_RATE);
+        headRow.createCell(2).setCellValue(MyDataBaseHelper.CADENCE);
+    }
+
+    // 创建Excel的一行数据。
+    private static void createCell(int TimeLeft, int HeartRate, int Cadence, XSSFSheet sheet) {
+        XSSFRow dataRow = sheet.createRow(sheet.getLastRowNum() + 1);
+        dataRow.createCell(0).setCellValue(TimeLeft);
+        dataRow.createCell(1).setCellValue(HeartRate);
+        dataRow.createCell(2).setCellValue(Cadence);
+    }
+
 
     class RandomMusicServiceConn implements ServiceConnection {
 
@@ -300,6 +405,13 @@ public class NotificationsFragment extends Fragment {
                 float distance = intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_DISTANCE, 0);
                 String dis = String.valueOf(distance/1000);
                 DistanceText.setText(dis + " km");
+
+                ContentValues values = new ContentValues();
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                values.put(MyDataBaseHelper.TIME_LEFT, intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_DURATION, 0));
+                values.put(MyDataBaseHelper.HEART_RATE, intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_HEARTRATE, 0));
+                values.put(MyDataBaseHelper.CADENCE,intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_STEP_RATE, 0));
+                db.insert(MyDataBaseHelper.TABLE_NAME,null,values);
             }
         }
     }
