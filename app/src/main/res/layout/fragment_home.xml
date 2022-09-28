@@ -236,6 +236,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="start Mode1"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/ExportData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Export Excel"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/ClearDB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear Database"/>
     </LinearLayout>
 
 
