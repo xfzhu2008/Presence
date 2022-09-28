@@ -22,7 +22,7 @@ public class MyDataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table Biodata(_id integer primary key autoincrement, TimeLeft String(20), HeartRate int(20), Cadence int(20))");
+        db.execSQL("create table Biodata(_id integer primary key autoincrement, TimeLeft int(20), HeartRate int(20), Cadence int(20))");
         Log.e("Create Table","success!" );
         Toast.makeText(mContext,"Create succeeded",Toast.LENGTH_SHORT).show();
     }

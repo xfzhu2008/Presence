@@ -302,7 +302,7 @@ public class HomeFragment extends Fragment {
 
             while (cursor.moveToNext()) {
                 Student student = new Student();
-                student.TimeLeft = cursor.getString(cursor.getColumnIndexOrThrow(MyDataBaseHelper.TIME_LEFT));
+                student.TimeLeft = cursor.getInt(cursor.getColumnIndexOrThrow(MyDataBaseHelper.TIME_LEFT));
                 student.HeartRate = cursor.getInt(cursor.getColumnIndexOrThrow(MyDataBaseHelper.HEART_RATE));
                 student.Cadence = cursor.getInt(cursor.getColumnIndexOrThrow(MyDataBaseHelper.CADENCE));
 
@@ -318,7 +318,7 @@ public class HomeFragment extends Fragment {
     private class Student {
         public int HeartRate;
         public int Cadence;
-        public String TimeLeft;
+        public int TimeLeft;
     }
 
     // 创建Excel标题行，第一行。
@@ -330,7 +330,7 @@ public class HomeFragment extends Fragment {
     }
 
     // 创建Excel的一行数据。
-    private static void createCell(String TimeLeft, int HeartRate, int Cadence, XSSFSheet sheet) {
+    private static void createCell(int TimeLeft, int HeartRate, int Cadence, XSSFSheet sheet) {
         XSSFRow dataRow = sheet.createRow(sheet.getLastRowNum() + 1);
         dataRow.createCell(0).setCellValue(TimeLeft);
         dataRow.createCell(1).setCellValue(HeartRate);
@@ -414,7 +414,7 @@ public class HomeFragment extends Fragment {
 
                 ContentValues values = new ContentValues();
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
-                values.put(MyDataBaseHelper.TIME_LEFT, String.valueOf(countdownText));
+                values.put(MyDataBaseHelper.TIME_LEFT, intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_DURATION, 0));
                 values.put(MyDataBaseHelper.HEART_RATE, intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_HEARTRATE, 0));
                 values.put(MyDataBaseHelper.CADENCE,intent.getIntExtra(HiHealthKitConstant.BUNDLE_KEY_STEP_RATE, 0));
                 db.insert(MyDataBaseHelper.TABLE_NAME,null,values);
