@@ -279,7 +279,7 @@ public class HomeFragment extends Fragment {
                 createCell(student.TimeLeft,student.HeartRate,student.Cadence,mSheet);
             }
         }
-        File xlsxFile = new File(Environment.getExternalStorageDirectory(), "excel.xlsx");
+        File xlsxFile = new File("/storage/emulated/0/Download/", "excel.xlsx");
         try{
             if (!xlsxFile.exists()) {
                 xlsxFile.createNewFile();
